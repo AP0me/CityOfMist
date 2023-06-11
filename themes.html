@@ -243,27 +243,27 @@
         elem.innerText = "Logos";
         parentTheme.setAttribute("class", "theme logos");
         elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
-          <option id="option0">THEME TYPE</option>
-          <option id="option1">DEFINING EVENT</option>
-          <option id="option2">DEFINING RELATIONSHIP</option>
-          <option id="option3">MISSION</option>
-          <option id="option4">PERSONALITY</option>
-          <option id="option5">POSSESSIONS</option>
-          <option id="option6">ROUTINE</option>
-          <option id="option7">TRAINING</option>`;
+          <option id="option10">THEME TYPE</option>
+          <option id="option11">DEFINING EVENT</option>
+          <option id="option12">DEFINING RELATIONSHIP</option>
+          <option id="option13">MISSION</option>
+          <option id="option14">PERSONALITY</option>
+          <option id="option15">POSSESSIONS</option>
+          <option id="option16">ROUTINE</option>
+          <option id="option17">TRAINING</option>`;
       }
       else if(parentTheme.getAttribute("class")=="theme logos"){
         elem.innerText = "Mythos";
         parentTheme.setAttribute("class", "theme mythos");
         elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
-          <option id="option0">THEME TYPE</option>
-          <option id="option1">ADAPTATION</option>
-          <option id="option2">BASTION</option>
-          <option id="option3">DIVINATION</option>
-          <option id="option4">EXPRESSION</option>
-          <option id="option5">MOBILITY</option>
-          <option id="option6">RELIC</option>
-          <option id="option7">SUBVERSION</option>`
+          <option id="option20">THEME TYPE</option>
+          <option id="option21">ADAPTATION</option>
+          <option id="option22">BASTION</option>
+          <option id="option23">DIVINATION</option>
+          <option id="option24">EXPRESSION</option>
+          <option id="option25">MOBILITY</option>
+          <option id="option26">RELIC</option>
+          <option id="option27">SUBVERSION</option>`
       }
     }
 
@@ -271,36 +271,36 @@
     logosThemesTypeText  = document.querySelectorAll(".logos>.Type>.TypeTextBox" );
     logosThemesTypeText.forEach(TextBox => {
       TextBox.innerHTML = `
-        <option id="option0">THEME TYPE</option>
-        <option id="option1">DEFINING EVENT</option>
-        <option id="option2">DEFINING RELATIONSHIP</option>
-        <option id="option3">MISSION</option>
-        <option id="option4">PERSONALITY</option>
-        <option id="option5">POSSESSIONS</option>
-        <option id="option6">ROUTINE</option>
-        <option id="option7">TRAINING</option>`;
+        <option id="option10">THEME TYPE</option>
+        <option id="option11">DEFINING EVENT</option>
+        <option id="option12">DEFINING RELATIONSHIP</option>
+        <option id="option13">MISSION</option>
+        <option id="option14">PERSONALITY</option>
+        <option id="option15">POSSESSIONS</option>
+        <option id="option16">ROUTINE</option>
+        <option id="option17">TRAINING</option>`;
     });
     mythosThemesTypeText.forEach(TextBox => {
       TextBox.innerHTML = `
-        <option id="option0">THEME TYPE</option>
-        <option id="option1">ADAPTATION</option>
-        <option id="option2">BASTION</option>
-        <option id="option3">DIVINATION</option>
-        <option id="option4">EXPRESSION</option>
-        <option id="option5">MOBILITY</option>
-        <option id="option6">RELIC</option>
-        <option id="option7">SUBVERSION</option>`
+        <option id="option20">THEME TYPE</option>
+        <option id="option21">ADAPTATION</option>
+        <option id="option22">BASTION</option>
+        <option id="option23">DIVINATION</option>
+        <option id="option24">EXPRESSION</option>
+        <option id="option25">MOBILITY</option>
+        <option id="option26">RELIC</option>
+        <option id="option27">SUBVERSION</option>`
     });
 
     function displayQuestions(){
       tagQuestionContainerList = document.querySelectorAll(".tagQuestionContainer>div");
-      selectedThemeTypeList = document.querySelectorAll(".mythos>.Type>.TypeTextBox>option:checked");//program flow for logos next.
+      selectedThemeTypeList = document.querySelectorAll(".theme>.Type>.TypeTextBox>option:checked");//program flow for logos next.
+
       for(var i=0; i<selectedThemeTypeList.length; i++){
         IdOfSelectedThemeTypes = parseInt(selectedThemeTypeList[i].getAttribute("id").replace("option",""));
         questionsContainerText = ""
-        console.log(IdOfSelectedThemeTypes);
         switch(IdOfSelectedThemeTypes){
-          case 4:
+          case 24:
             questionsContainerText=`
               <p>Expression</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) A way to affect the world.</p>
@@ -314,7 +314,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) Your attitude when you use expression.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) A way to protect from similar effects.</p>`
             break;
-          case 5:
+          case 25:
             questionsContainerText=`
               <p>Mobility</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) Your most useful movement form.</p>
@@ -328,7 +328,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) A way to restraining others' movements.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) Special resource mobility gives you access to.</p>`
             break;
-          case 6:
+          case 26:
             questionsContainerText=`
               <p>Relic</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) The main feature or part of your relic.</p>
@@ -342,7 +342,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) Affect of relic when it goes into overdrive.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) A power of your relic you are beginning to unlock.</p>`
             break;
-          case 1:
+          case 21:
             questionsContainerText=`
               <p>Adaptation</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) A versatile power.</p>
@@ -356,7 +356,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) Strategy, combo you use in battle.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) A way to enhance or weaken others powers.</p>`
             break;
-          case 2:
+          case 22:
             questionsContainerText=`
               <p>Bastion</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) An ability that most often protects you.</p>
@@ -370,7 +370,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) A way of using your ability when you are in a clinch.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) A tactic you employ when you use your ability.</p>`
             break;
-          case 3:
+          case 23:
             questionsContainerText=`
               <p>Divination</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) Power to know things you wouldn't otherwise know.</p>
@@ -384,7 +384,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) Way to affect others with your power.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) Frontier of knowledge at the edge of your divination.</p>`
             break;
-          case 7:
+          case 27:
             questionsContainerText=`
               <p>Subversion</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) Power to hide or mask your actions.</p>
@@ -398,17 +398,8 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) Conditions of undetectibility enchancement.</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) Another related subversive power you developed.</p>`
             break;
-        }
-        tagQuestionContainerList[i].innerHTML = questionsContainerText;
-      }
 
-      selectedThemeTypeList = document.querySelectorAll(".logos>.Type>.TypeTextBox>option:checked");//program flow for logos next.
-      for(var i=0; i<selectedThemeTypeList.length; i++){
-        IdOfSelectedThemeTypes = parseInt(selectedThemeTypeList[i].getAttribute("id").replace("option",""));
-        questionsContainerText = ""
-        console.log(IdOfSelectedThemeTypes);
-        switch(IdOfSelectedThemeTypes){
-          case 1:
+          case 11:
             questionsContainerText=`
               <p>Defining event</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHAT KIND OF STRONG EMOTION DID YOUR DEFINING EVENT LEAVE YOU WITH?</p>
@@ -422,7 +413,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHAT PHYSICAL CHANGE OR IMPROVEMENT STEMMED FROM YOUR DEFINING EVENT?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) HOW DO PEOPLE TREAT YOU BECAUSE OF YOUR DEFINING EVENT?</p>`
             break;
-          case 2:
+          case 12:
             questionsContainerText=`
               <p>Defining relationship</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHY THIS RELATIONSHIP IS SO IMPORTANT FOR YOU?</p>
@@ -436,7 +427,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHAT HELPS YOU PROTECT THEM?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) Where DO YOU SPEND TIME TOGETHER?</p>`
             break;
-          case 3:
+          case 13:
             questionsContainerText=`
               <p>Mission</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHAT DO YOU NEED MOST FOR REALIZE YOUR MISSION?</p>
@@ -450,7 +441,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHAT DO YOU HAVE THAT COULD HELP YOU IN YOUR MISSION?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) WHAT PART OF YOUR PLAN TO REALIZE YOUR GOAL HAVE YOU MOST PERFECTED?</p>`
             break;
-          case 4:
+          case 14:
             questionsContainerText=`
               <p>Personality</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHAT IS AT THE HEART OF YOUR PERSONALITY ?</p>
@@ -464,7 +455,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHAT ARE YOU GENERALLY INTERESTED IN?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) HOW DO STRIVE TO YOU IMPROVE YOURSELF?</p>`
             break;
-          case 5:
+          case 15:
             questionsContainerText=`
               <p>Possessions</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHAT IS THE MOST IMPORTANT THING IN YOUR POSSESSION?</p>
@@ -478,7 +469,7 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHAT USEFUL QUALITY HAVE YOUR GOODS?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) WHICH ARTICLE COMPLETES A SET WITH YOUR OTHERS FOOD LABELS?</p>`
             break;
-          case 6:
+          case 16:
             questionsContainerText=`
               <p>Routine</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHO USUALLY HELPS YOU?</p>
@@ -492,9 +483,9 @@
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="I" >I) WHERE DO YOU DO YOUR ROUTINE, OR WHERE ARE YOU GOING TO ESCAPE IT?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="J" >J) WHAT MAKES YOU ALL IN THE SAME PLACE DAYS?</p>`
             break;
-          case 7:
+          case 17:
             questionsContainerText=`
-              <p>Subversion</p>
+              <p>Training</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="A" >A) WHAT DO YOU DO OR KNOW BEST?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="B" >B) IN YOUR FIELD OF EXPERTISE, IN WHAT SPECIFIC SKILL OR SUBJECT DO YOU EXCEL?</p>
               <p class="questionParaq" onclick="letteredQuestionAnswered(this, `+i+`)" letter="C" >C) WHAT OTHER TANGENT FIELD ARE YOU IN-YOU VENTURED INDIRECTLY? ING GIVES THE BEST RESULTS?</p>
