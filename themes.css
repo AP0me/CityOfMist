@@ -1,0 +1,210 @@
+*{
+  font-size: 1.5vw;
+}
+.html, body{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+.resizeme{
+  position: relative;
+  height: 50vh;
+  max-height: 90vh;
+  resize: vertical;
+  overflow: auto;
+}
+.tagQuestionContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  overflow-y: auto;
+  height: 50vh;
+  width: 100%;
+}
+.table{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 100%;
+  height: 90vh;
+}
+@media(max-aspect-ratio: 7/5) {
+  *{
+    font-size: 3vw;
+  }
+  .table{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 200vh;
+  }
+  .tagQuestionContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    overflow-y: auto;
+    height: 50vh;
+    width: 100%;
+  }
+  .resizeme{
+    position: relative;
+    height: 50vh;
+    resize: vertical;
+    overflow: auto;
+  }
+}
+@media(max-aspect-ratio: 4/5) {
+  *{
+    font-size: 5vw;
+  }
+  .table{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    height: 400vh;
+  }
+  .tagQuestionContainer{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    height: 50vh;
+    width: 100%;
+  }
+  .resizeme{
+    position: relative;
+    height: 50vh;
+    resize: vertical;
+    overflow: auto;
+  }
+}
+.theme{
+  display: grid;
+  grid-template-rows: 0.25fr 1fr 0.75fr 6fr;
+  border-radius: 3%;
+  margin-left: 1%;
+  margin-right: 1%;
+  overflow-x: hidden;
+  overflow-y: unset;
+}
+.theme.mythos{
+  color: rgba(0, 0, 0, 0.837);
+  background-color: rgb(208, 102, 208)
+}
+.mythos>.Mystery>.MysteryHeader, .logos>.Type>.TypeHeader{
+  color: rgba(0, 0, 0, 0.837);
+}
+.TypeHeader{
+  text-align: center;
+  text-decoration: underline;
+  background-color: rgba(0, 0, 0, 0.255);
+  user-select: none;
+}
+.mythos>.Type>.TypeTextBox{
+  color: black;
+  background-color: rgb(135, 68, 135);
+}
+.theme.logos{
+  color: rgb(121, 78, 0);
+  background-color: rgb(253, 201, 181);
+}
+.Type{
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+.Attention{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  width: calc(100% - 2px);
+}
+.logos>.checkAttentionFade>.Attention{
+  outline: rgba(185, 49, 0, 0.514) dashed 1px;
+}
+.mythos>.checkAttentionFade>.Attention{
+  outline: rgb(135, 68, 135) dashed 1px;
+}
+.AttentionCheckContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.Fade{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  width: calc(100% - 2px);
+}
+.logos>.checkAttentionFade>.Fade{
+  outline: rgba(185, 49, 0, 0.514) dashed 1px;
+}
+.mythos>.checkAttentionFade>.Fade{
+  outline: rgb(135, 68, 135) dashed 1px;
+}
+.FadeCheckContainer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.checkAttentionFade{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  left: 1px;
+}
+.TextBox{
+  color: black;
+  position: relative;
+  width: 90%;
+  left: 7%;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+.Mystery>.TextBox{
+  height: 100%;
+  max-height: 100px;
+  overflow: auto;
+}
+.Mystery{
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+}
+.logos>.Mystery>.MysteryHeader, .logos>.Type>.TypeHeader{
+  color: rgb(220, 129, 45);
+  background-color: rgb(185, 49, 0);
+}
+.logos>.Type>.TypeTextBox{
+  background-color: rgba(185, 49, 0, 0.514);
+}
+.bottomHalfOfBody{
+  display: grid;
+  grid-template-rows: 1fr 0.2fr 1fr 0.25fr 1fr;
+}
+.Title{
+  color: black;
+  min-height: 68px;
+  overflow-y: auto;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+.Power{
+  max-height: 118px;
+  overflow-y: auto;
+}
+.PowerTagCommon{
+  display: grid;
+  grid-template-columns: 1fr 10fr 1fr;
+}
+.powerTag{
+  color: black;
+  border-bottom: 1px dashed black
+}
+.questionLetter{
+  border: 0;
+  padding: 0;
+  appearance: none;
+  text-align: center;
+}
+
+.questionParaq{
+  color: gray;
+}
+.questionParaq:hover{
+  color: white;
+  background-color: gray;
+}
