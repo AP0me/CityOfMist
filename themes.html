@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" type="text/css" href="themes.css" />
   </head>
-<body>
+<body onmouseup="resizeTable()">
   <div class="root">
     <div class="resizeme">
       <div class="table">
         <div id="theme1" class="theme logos">
           <div id="1" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">Logos</div>
+            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select>
           </div>
@@ -51,7 +51,7 @@
         </div>
         <div id="theme2" class="theme logos">
           <div id="2" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">Logos</div>
+            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select>
           </div>
@@ -91,7 +91,7 @@
         </div>
         <div id="theme3" class="theme logos">
           <div id="3" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">Logos</div>
+            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select> 
           </div>
@@ -131,7 +131,7 @@
         </div>
         <div id="theme4" class="theme logos">
           <div id="4" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">Logos</div>
+            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select> 
           </div>
@@ -171,6 +171,7 @@
         </div>
       </div>
     </div>
+    <div class="resizebar" onmouseenter="resizeTable()"><div class="resizebar-inground"></div></div>
     <div class="tagQuestionContainer">
       <div class="tagQuestionContainer1" id="id1">
         <div class="PowerQuestions"></div>
@@ -189,6 +190,8 @@
         <div class="WeaknessQuestions"></div>
       </div>
     </div>
+    <div></div>
+
   </div>
   <script src="themes.js"></script>
 <body></html>

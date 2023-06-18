@@ -61,7 +61,7 @@ function deleteThisDiv(ThisDiv){
 function ChangeThemeML(elem){
   parentTheme = elem.parentNode.parentNode;
   if(parentTheme.getAttribute("class")=="theme mythos"){
-    elem.innerText = "Logos";
+    elem.innerText = "_Logos_";
     parentTheme.setAttribute("class", "theme logos");
     elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
       <option id="option10">THEME TYPE</option>
@@ -74,7 +74,7 @@ function ChangeThemeML(elem){
       <option id="option17">TRAINING</option>`;
   }
   else if(parentTheme.getAttribute("class")=="theme logos"){
-    elem.innerText = "Mythos";
+    elem.innerText = "_Mythos_";
     parentTheme.setAttribute("class", "theme mythos");
     elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
       <option id="option20">THEME TYPE</option>
@@ -460,4 +460,11 @@ function letteredWeaknessQuestionAnswered(letteredQuestion, themeId){
 
 function changeThemeType(elem){
   selectedThemeTypeList = document.querySelectorAll(".theme>.Type>.TypeTextBox>option:checked");
+}
+
+function resizeTable(){
+  elem=document.querySelector(".resizebar");
+  myHeight = elem.style.height;
+  table = document.querySelector(".resizeme");
+  table.style.height = myHeight;
 }
