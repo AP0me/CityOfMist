@@ -329,115 +329,115 @@ function displayQuestions(){
       case 24:
         questionsContainerText=`
           <p class="questionParaq">Expression</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) In what situations or conditions weaken or delete the expression of your myth?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Which targets are immune or resistant in the expression of your myth?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What happens when you lose control on expressing your myth?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What are the impacts of the introduction of your myths in the world?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Conditions of weakness of your expression.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Targets that are immune or resistant to your expression.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Results of losing control of your expressing.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Impacts of the bringing your myths into the world?</p>`
         break;
       case 25:
         questionsContainerText=`
           <p class="questionParaq">Mobility</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What hinders or slows you down?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What happens when you go too fast, too far, etc.?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What happens when you are caught?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What residual evidence does your movement leaves on you, on others or in the environment?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Something that hinders or slows you down.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Results of going too fast, too far, etc.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Results of getting caught.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Residual evidence your movement leaves on you, others or environment?</p>`
         break;
       case 26:
         questionsContainerText=`
           <p class="questionParaq">Relic</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What is the most troublesome defect of your relic?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What can interfere with powers of your relic?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What can damage or destroy your relic?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What has changed for worst in you because of your relic?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Troublesome defect of your relic.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Something that interferes with powers of your relic.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something that can damage or destroy your relic.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Personality trait that has changed for worse because of your relic.</p>`
         break;
       case 21:
         questionsContainerText=`
           <p class="questionParaq">Adaptation</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What do your powers depend on?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Which results are the most difficult to reaching?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What hinders your myth or limits its possibilities?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What bad habits have you got due to your powers of adaptation?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Something that your powers depend on.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Most difficult results to reach.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something that hinders your myth or limits its possibilities.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Bad habits you have got due to your powers.</p>`
         break;
       case 22:
         questionsContainerText=`
           <p class="questionParaq">Bastion</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) How your defencive powers affect your appearance?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What are the unwanted implications of your defence?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What attack is your defence suseptable to?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What personality traint derived from your defence gets into trouble?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Negative way your defencive powers affect your appearance.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Unwanted implication of your defence.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Attack your defence suseptable to.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Personality traint derived from your defence gets into trouble.</p>`
         break;
       case 23:
         questionsContainerText=`
           <p class="questionParaq">Divination</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What happens when your divination overwhelms you?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What can hinder or block your divination?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What is beyond the reach of your divination?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What do you need to use your divination?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Results of you getting overwhelmed by your divination.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Something that hinders or blocks your divination.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something that is beyond the reach of your divination.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Something that you need, to use your divination.</p>`
         break;
       case 27:
         questionsContainerText=`
           <p class="questionParaq">Subversion</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What might expose you to?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What reveals when you are exposed ?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Who or what are you hiding from?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What psychological tendencies unfavorable have you developed in the shadow or behind your mask?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Something that might expose you.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Something that is revealed when you are exposed.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something/Someone that are you hiding from.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Disadvantagous psychological tendencies have you developed in the shadow or behind your mask.</p>`
         break;
 
       case 11://Left here...
         questionsContainerText=`
           <p class="questionParaq">Defining event</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What emotional scar or baggage does your defining event did it left you?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Following your determining event, what responsibilities or charges social response?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Who or what haunts you because of your defining event?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What is now broken within you, physically or mentally, due to your event determining ?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Emotional scar or baggage your defining event left you with.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Following your defining event, what responsibilities or charges social response.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something/Someone that haunts you because of your defining event.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Something that is now broken within you, physically or mentally, due to your defining event.</p>`
         break;
       case 12:
         questionsContainerText=`
           <p class="questionParaq">Defining relationship</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) How can they be hurt or hurt?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What negative effect do they have on you ?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Who or what else awaits them attention or its time?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) In what circumstances will they be unable to help you?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Way they can be hurt or impeded.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Negative effect they have on you.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something/Someone else that awaits their attention or time.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Circumstances when they are unable to help you.</p>`
         break;
       case 13:
         questionsContainerText=`
           <p class="questionParaq">Mission</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What are the side effects or charges of the pursuit of the mission?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What are the weak points or wild-cards of your plan?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Which approach or psychological disposition will hindrance your endeavors?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Why have you not succeeded so far?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Side effects or burdens of the pursuit of the mission.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Weak points or wild-cards of your plan.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Approach or psychological disposition will hinder your endeavors?</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Reason you have not succeeded so far.</p>`
         break;
       case 14:
         questionsContainerText=`
           <p class="questionParaq">Personality</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What happens when you leave yourself to go too far?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What kinds of people or conditions make your personality less effective?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What aspects of your appearance, your style or your physics can constrain you?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What happens when you are pushed in a corner?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Restults of letting yourself to go too far.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Kinds of people or conditions make your personality less effective.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Aspect of your appearance, your style or your physique that can constrain you.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Results of you being pushed into a corner.</p>`
         break;
       case 15:
         questionsContainerText=`
           <p class="questionParaq">Possessions</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What technical or practical defect have your items or possessions?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What bad habits or traits related to your property are you displaying?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) What conditions could make your less effective possessions?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Who or what can prevent you to use your goods?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Technical or practical defect your items or possessions have.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Bad habits or traits related to your property you are displaying.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Conditions that could make your possessions less effective.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Something/Someone that can prevent you from using your goods.</p>`
         break;
       case 16:
         questionsContainerText=`
           <p class="questionParaq">Routine</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) At the end of your day, whether you do you stay?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) What are the trending limitations or cons of your routine?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Who or what can interfere with your routine?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) What happens when you are knocked out of your routine?</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Something are you felt with at the end of your day.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Mundane limitations or cons of your routine.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Something/Someone that can interfere with your routine.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Results of getting thrown out of your routine.</p>`
         break;
       case 17:
         questionsContainerText=`
           <p class="questionParaq">Training</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) What is the most problematic failure in your technique?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) How has your training adequately affected your psyche or your body?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Who is after you because of your importance in the field?</p>
-          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Name a unique defect to a specific move or method as you described in your power tags.</p>`
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="A" >A) Problematic flaw in your technique.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="B" >B) Adverse affected of your training on your psyche or your body.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="C" >C) Someone that is after you because of your importance in the field.</p>
+          <p class="questionParaq" onclick="letteredWeaknessQuestionAnswered(this, `+i+`)" letter="D" >D) Unique defect to a specific move or method you described in your power tags.</p>`
         break;
     }
     weaknessTagQuestionContainerList[i].innerHTML = questionsContainerText;
@@ -462,9 +462,19 @@ function changeThemeType(elem){
   selectedThemeTypeList = document.querySelectorAll(".theme>.Type>.TypeTextBox>option:checked");
 }
 
-function resizeTable(){
+function resizeTable(Scroll){
+  insideScroll = Scroll.querySelector("div");
+  heightScroll = Scroll.scrollTop;
+  heightScroll = heightScroll/10;
   elem=document.querySelector(".resizebar");
-  myHeight = elem.style.height;
+  myHeight = heightScroll;
+  console.log(myHeight);
   table = document.querySelector(".resizeme");
-  table.style.height = myHeight;
+  table.style.height = myHeight+"px";
+  console.log(table.style.height);
 }
+
+
+elem=document.querySelector(".resizebar");
+elemSubdiv=document.querySelector(".resizebar>div");
+elem.scrollBy(0, elemSubdiv.offsetHeight/2);
