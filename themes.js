@@ -447,15 +447,15 @@ displayQuestions();
 
 function letteredQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
-  plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfBody>.Power>.PlusDiv");
+  plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfTheme>.Power>.PlusDiv");
   console.log(plusDivAbove);
-  newPlusDiv(plusDivAbove, answeredLetter)
+  newPlusDiv(plusDivAbove, answeredLetter);
 }
 function letteredWeaknessQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
-  plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfBody>.Power>.PlusDiv");
+  plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfTheme>.Power>.PlusDiv");
   console.log(plusDivAbove);
-  newPlusDiv(plusDivAbove, answeredLetter)
+  newPlusDiv(plusDivAbove, answeredLetter);
 }
 
 function changeThemeType(elem){
@@ -468,13 +468,145 @@ function resizeTable(Scroll){
   heightScroll = heightScroll/10;
   elem=document.querySelector(".resizebar");
   myHeight = heightScroll;
-  console.log(myHeight);
   table = document.querySelector(".resizeme");
   table.style.height = myHeight+"px";
-  console.log(table.style.height);
 }
-
 
 elem=document.querySelector(".resizebar");
 elemSubdiv=document.querySelector(".resizebar>div");
 elem.scrollBy(0, elemSubdiv.offsetHeight/2);
+
+function bottomHalfSelector(selector){
+  selectedOption   = selector.querySelector("option:checked");
+  selectedOptionID = selectedOption.getAttribute("id");
+  document.querySelectorAll(".bottomHalfRoot>.hideable").forEach(element => {
+    element.setAttribute("visible", "id0");
+  });
+  if(selectedOptionID == "option1"){
+    console.log(selectedOptionID);
+    document.querySelector(".tagQuestionContainer").setAttribute("visible", "id1");
+  }
+  else if(selectedOptionID == "option2"){
+    console.log(selectedOptionID);
+    document.querySelector(".commonTricks").setAttribute("visible", "id1");
+  }
+}
+
+function addCommonTricks(){
+  allPowerTags = document.querySelectorAll(".Power");
+  allWeaknessTags = document.querySelectorAll(".Weakness");
+  allPWs = document.querySelector(".allPWs");
+  allPowerTags.forEach(tag => {
+    tag.removeChild(tag.querySelector(".PlusDiv"))
+    allPWs.appendChild(tag.cloneNode(true));
+  });
+  allWeaknessTags.forEach(tag => {
+    tag.removeChild(tag.querySelector(".PlusDiv"));
+    allPWs.appendChild(tag.cloneNode(true));
+  });
+}
+function saveTrick(){
+  document.querySelectorAll(".allPWs>.Power>.PowerTagCommon").forEach(element => {
+    console.log(element.querySelector(".burnTag:checked"));
+    if( element.querySelector(".burnTag:checked")!=null ){
+      elemText = element.querySelector(".powerTag").innerText;
+      divWithElemText = document.createElement("div");
+      divWithElemText.innerText = elemText;
+      document.querySelector(".actionList").appendChild(divWithElemText);
+    }
+  });
+  document.querySelectorAll(".allPWs>.Weakness>.PowerTagCommon").forEach(element => {
+    if( element.querySelector(".burnTag:checked")!=null ){
+      elemText = element.querySelector(".powerTag").innerText;
+      divWithElemText = document.createElement("div");
+      divWithElemText.innerText = elemText;
+      document.querySelector(".actionList").appendChild(divWithElemText);
+    }
+  });
+}
+
+function saveTagChanges() {
+  var allPowerTags = {
+    "id1": [],
+    "id2": [],
+    "id3": [],
+    "id4": []
+  };
+  var allWeaknessTags = {
+    "id1": [],
+    "id2": [],
+    "id3": [],
+    "id4": []
+  };
+
+  for (let k = 0; k < 4; k++) {
+    let elemTextList = [];
+    document.querySelectorAll(".bottomHalf>.Power#id"+(k+1)+">.PowerTagCommon").forEach(element => {
+      let elemText = element.querySelector(".powerTag").innerText;
+      elemTextList.push(elemText);
+    });
+    allPowerTags["id" + (k+1)] = elemTextList;
+    console.log(elemTextList);
+
+    elemTextList = [];
+    document.querySelectorAll(".bottomHalf>.Weakness#id"+(k+1)+">.PowerTagCommon").forEach(element => {
+      let elemText = element.querySelector(".powerTag").innerText;
+      elemTextList.push(elemText);
+    });
+    allWeaknessTags["id" + (k+1)] = elemTextList;
+    console.log(elemTextList);
+  }
+  window.localStorage.setItem("PowerTags", JSON.stringify(allPowerTags));
+  window.localStorage.setItem("WeaknessTags", JSON.stringify(allWeaknessTags));
+}
+function loadSavedTags(){
+  PowerTagTexts = window.localStorage.getItem("PowerTags");
+  WeaknessTagTexts  = window.localStorage.getItem("WeaknessTags");
+  PowerTagTexts = JSON.parse(PowerTagTexts);
+  WeaknessTagTexts  = JSON.parse(WeaknessTagTexts);
+
+  for (var ID_index = 0; ID_index < 4; ID_index++) {
+
+    var theme = PowerTagTexts["id"+(ID_index+1)];
+    for(var i=0; i<theme.length; i++){
+      var tagText = theme[i];
+      PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
+      newPlusDiv(PowerPlusDiv, "-");
+      PowerTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
+      PowerTags[PowerTags.length-1].innerText = tagText;
+    }
+    var theme = WeaknessTagTexts["id"+(ID_index+1)];
+    for(var i=0; i<theme.length; i++){
+      var tagText = theme[i];
+      WeaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
+      newPlusDiv(WeaknessPlusDiv, "-");
+      WeaknessTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
+      WeaknessTags[WeaknessTags.length-1].innerText = tagText;
+    }
+  }
+}
+function saveThemeTypes(){
+  checkedThemeTypeIds = [];
+  document.querySelectorAll(".TypeTextBox>option:checked").forEach(checkedOption => {
+    console.log(checkedOption.getAttribute("id"));
+    checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option",""));
+    checkedThemeTypeIds.push(checkedThemeTypeId);
+  });;
+  console.log(checkedThemeTypeIds);
+  window.localStorage.setItem("checkedThemeTypeIds", checkedThemeTypeIds);
+
+  themeTypeIndicators = [];
+  document.querySelectorAll(".theme").forEach(theme => {
+    themeTypeClass = theme.getAttribute("class");
+    themeTypeIndicator = themeTypeClass.substring(themeTypeClass.indexOf(" ")+1, themeTypeClass.length);
+    if(themeTypeIndicator=="logos"){
+      themeTypeIndicators.push(0);
+    }
+    else if(themeTypeIndicator=="mythos"){ 
+      themeTypeIndicators.push(1);
+    }
+  });
+  console.log(themeTypeIndicators);
+  window.localStorage.setItem("themeTypeIndicators", themeTypeIndicators);
+}
+
