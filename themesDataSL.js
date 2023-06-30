@@ -1,4 +1,3 @@
-let IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
 
 function saveTags(){
   var allPowerTags = {
@@ -73,8 +72,10 @@ function saveTags(){
     allWeaknessTags["id" + (k+1)]["questionLetter"] = elemLetterList;
     allWeaknessTags["id" + (k+1)]["burned"] = elemBurnedList;
   }
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
+  window.localStorage.setItem(IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
 }
 function loadTags(){
   translatorDict = {
@@ -88,9 +89,10 @@ function loadTags(){
     "7": "H",
     "8": "I",
     "9": "J",
-  }  
-  PowerTagTexts = window.localStorage.getItem("PowerTags");
-  WeaknessTagTexts  = window.localStorage.getItem("WeaknessTags");
+  };
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  PowerTagTexts = window.localStorage.getItem(IDsaveSlotChosen+" PowerTags");
+  WeaknessTagTexts  = window.localStorage.getItem(IDsaveSlotChosen+" WeaknessTags");
   PowerTagTexts = JSON.parse(PowerTagTexts);
   WeaknessTagTexts  = JSON.parse(WeaknessTagTexts);
   for (var ID_index = 0; ID_index < 4; ID_index++){
@@ -126,8 +128,10 @@ function saveThemeTypes(){
     checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option",""));
     checkedThemeTypeIds.push(checkedThemeTypeId);
   });;
-  checkedThemeTypeIds = JSON.stringify({ "a": checkedThemeTypeIds }); 
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
+  checkedThemeTypeIds = JSON.stringify({ "a": checkedThemeTypeIds });
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
 
   themeTypeIndicators = [];
   document.querySelectorAll(".theme").forEach(theme => {
@@ -140,14 +144,17 @@ function saveThemeTypes(){
       themeTypeIndicators.push(1);
     }
   });
-  themeTypeIndicators = JSON.stringify({ "a": themeTypeIndicators }); 
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
+  themeTypeIndicators = JSON.stringify({ "a": themeTypeIndicators });
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
 }
 function loadThemeTypes(){
-  themeTypeIndicators = window.localStorage.getItem("themeTypeIndicators");
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  themeTypeIndicators = window.localStorage.getItem(IDsaveSlotChosen+" themeTypeIndicators");
   themeTypeIndicators = JSON.parse(themeTypeIndicators)["a"];
   TypeHeaders = document.querySelectorAll(".TypeHeader");
-  checkedThemeTypeIds = window.localStorage.getItem("checkedThemeTypeIds");
+  checkedThemeTypeIds = window.localStorage.getItem(IDsaveSlotChosen+" checkedThemeTypeIds");
   checkedThemeTypeIds = JSON.parse(checkedThemeTypeIds)["a"];
   themeTypes = document.querySelectorAll(".TypeTextBox");
 
@@ -180,7 +187,9 @@ function saveThemeTitleAndMystery(){
     var title = titles[i];
     titleText["title"].push(title.innerHTML);
   }
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" titleText", JSON.stringify(titleText));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" titleText", JSON.stringify(titleText));
 
   textBoxText={ "textBox": [] };
   textBoxes = document.querySelectorAll(".Mystery>.TextBox");
@@ -188,17 +197,20 @@ function saveThemeTitleAndMystery(){
     var textBox = textBoxes[i];
     textBoxText["textBox"].push(textBox.innerHTML);
   }
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
 }
 function loadThemeTitleAndMystery(){
-  var titleText = JSON.parse(window.localStorage.getItem("titleText"));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  var titleText = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" titleText"));
   var titles = document.querySelectorAll('.Title');
   for(let i=0; i < titles.length; i++){
     var title = titles[i];
     title.innerHTML = titleText["title"][i];
   }
 
-  var textBoxText = JSON.parse(window.localStorage.getItem("textBoxText"));
+  var textBoxText = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" textBoxText"));
   var textBoxes = document.querySelectorAll('.Mystery>.TextBox');
   for(let i=0; i < textBoxes.length; i++){
     var textBox = textBoxes[i];
@@ -232,10 +244,13 @@ function saveCheckboxes(){
       Checkboxes["theme"+i]["fade"].push(fadeCheck.checked);
     });
   }
-  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  console.log(IDsaveSlotChosen);
+  window.localStorage.setItem(IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
 }
 function loadCheckboxes(){
-  Checkboxes = JSON.parse(window.localStorage.getItem("Checkboxes"));
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  Checkboxes = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" Checkboxes"));
   for (var i = 1; i < 5; i++){
     var k=0;
     document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Attention>.AttentionCheckContainer>.AttentionCheck").forEach(attentionCheck => {
