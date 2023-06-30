@@ -33,7 +33,9 @@ function newPlusDiv(thePlusDiv, initLetter){
     thePlusDiv.removeAttribute("onfocus");
     thePlusDiv.removeAttribute("PlusDiv");
     thePlusDiv.innerText = "";
+    thePlusDiv = document.createElement("input");
     thePlusDiv.setAttribute("class","powerTag");
+    thePlusDiv.setAttribute("placeholder","Click on, then off to delete.");
     thePlusDiv.setAttribute("onfocusout","deleteThisDiv(this)");
     PowerTagCommonDiv.appendChild(thePlusDiv);
 
@@ -54,7 +56,7 @@ function newPlusDiv(thePlusDiv, initLetter){
   }
 }
 function deleteThisDiv(ThisDiv){
-  if(ThisDiv.innerText.trim() === ''){ThisDiv.parentNode.parentNode.removeChild(ThisDiv.parentNode);}
+  if(ThisDiv.value.trim() === ''){ThisDiv.parentNode.parentNode.removeChild(ThisDiv.parentNode);}
 }
 
 function ChangeThemeML(elem){
@@ -525,13 +527,12 @@ function newSaveSlot(){
   var saveSlots = document.querySelector(".saveSlots");
   var saveSlotName = document.querySelector(".saveSlotName").value;
   newSlotOption = document.createElement("option")
-  newSlotOption.setAttribute("id", (saveSlots.options.length-1));
+  newSlotOption.setAttribute("id", "saveSlotName"+(saveSlots.options.length-1));
   newSlotOption.innerHTML = saveSlotName;
   saveSlots.appendChild(newSlotOption);
 }
 function removeSaveSlot(){
   var saveSlotChosen = document.querySelector(".saveSlots>option:checked");
-  var saveSlotOptionID = saveSlotChosen.getAttribute("id");
   saveSlotChosen.parentNode.selectedIndex = 0;
   saveSlotChosen.parentNode.removeChild(saveSlotChosen);
 }
