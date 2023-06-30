@@ -8,7 +8,6 @@ function newPlusDiv(thePlusDiv, initLetter){
     questionLetter.setAttribute("class", "questionLetter");
     parentTheme = thePlusDiv.parentNode.parentNode.parentNode;
     selectedOption_ID = parentTheme.querySelector(".TypeTextBox>option:checked").getAttribute("id");
-    console.log(selectedOption_ID);
     questionLetter.innerHTML = `
       <option id="option0">A</option>
       <option id="option1">B</option>
@@ -61,6 +60,7 @@ function deleteThisDiv(ThisDiv){
 function ChangeThemeML(elem){
   parentTheme = elem.parentNode.parentNode;
   if(parentTheme.getAttribute("class")=="theme mythos"){
+    elem.setAttribute("class", "TypeHeader mythos")
     elem.innerText = "_Logos_";
     parentTheme.setAttribute("class", "theme logos");
     elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
@@ -74,6 +74,7 @@ function ChangeThemeML(elem){
       <option id="option17">TRAINING</option>`;
   }
   else if(parentTheme.getAttribute("class")=="theme logos"){
+    elem.setAttribute("class", "TypeHeader mythos")
     elem.innerText = "_Mythos_";
     parentTheme.setAttribute("class", "theme mythos");
     elem.parentNode.querySelector(".TypeTextBox").innerHTML=`
@@ -448,13 +449,11 @@ displayQuestions();
 function letteredQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
   plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfTheme>.Power>.PlusDiv");
-  console.log(plusDivAbove);
   newPlusDiv(plusDivAbove, answeredLetter);
 }
 function letteredWeaknessQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
   plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalfOfTheme>.Power>.PlusDiv");
-  console.log(plusDivAbove);
   newPlusDiv(plusDivAbove, answeredLetter);
 }
 
@@ -483,11 +482,9 @@ function bottomHalfSelector(selector){
     element.setAttribute("visible", "id0");
   });
   if(selectedOptionID == "option1"){
-    console.log(selectedOptionID);
     document.querySelector(".tagQuestionContainer").setAttribute("visible", "id1");
   }
   else if(selectedOptionID == "option2"){
-    console.log(selectedOptionID);
     document.querySelector(".commonTricks").setAttribute("visible", "id1");
   }
 }
@@ -507,7 +504,6 @@ function addCommonTricks(){
 }
 function saveTrick(){
   document.querySelectorAll(".allPWs>.Power>.PowerTagCommon").forEach(element => {
-    console.log(element.querySelector(".burnTag:checked"));
     if( element.querySelector(".burnTag:checked")!=null ){
       elemText = element.querySelector(".powerTag").innerText;
       divWithElemText = document.createElement("div");
@@ -525,88 +521,17 @@ function saveTrick(){
   });
 }
 
-function saveTagChanges() {
-  var allPowerTags = {
-    "id1": [],
-    "id2": [],
-    "id3": [],
-    "id4": []
-  };
-  var allWeaknessTags = {
-    "id1": [],
-    "id2": [],
-    "id3": [],
-    "id4": []
-  };
-
-  for (let k = 0; k < 4; k++) {
-    let elemTextList = [];
-    document.querySelectorAll(".bottomHalf>.Power#id"+(k+1)+">.PowerTagCommon").forEach(element => {
-      let elemText = element.querySelector(".powerTag").innerText;
-      elemTextList.push(elemText);
-    });
-    allPowerTags["id" + (k+1)] = elemTextList;
-    console.log(elemTextList);
-
-    elemTextList = [];
-    document.querySelectorAll(".bottomHalf>.Weakness#id"+(k+1)+">.PowerTagCommon").forEach(element => {
-      let elemText = element.querySelector(".powerTag").innerText;
-      elemTextList.push(elemText);
-    });
-    allWeaknessTags["id" + (k+1)] = elemTextList;
-    console.log(elemTextList);
-  }
-  window.localStorage.setItem("PowerTags", JSON.stringify(allPowerTags));
-  window.localStorage.setItem("WeaknessTags", JSON.stringify(allWeaknessTags));
+function newSaveSlot(){
+  var saveSlots = document.querySelector(".saveSlots");
+  var saveSlotName = document.querySelector(".saveSlotName").value;
+  newSlotOption = document.createElement("option")
+  newSlotOption.setAttribute("id", (saveSlots.options.length-1));
+  newSlotOption.innerHTML = saveSlotName;
+  saveSlots.appendChild(newSlotOption);
 }
-function loadSavedTags(){
-  PowerTagTexts = window.localStorage.getItem("PowerTags");
-  WeaknessTagTexts  = window.localStorage.getItem("WeaknessTags");
-  PowerTagTexts = JSON.parse(PowerTagTexts);
-  WeaknessTagTexts  = JSON.parse(WeaknessTagTexts);
-
-  for (var ID_index = 0; ID_index < 4; ID_index++) {
-
-    var theme = PowerTagTexts["id"+(ID_index+1)];
-    for(var i=0; i<theme.length; i++){
-      var tagText = theme[i];
-      PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
-      newPlusDiv(PowerPlusDiv, "-");
-      PowerTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      PowerTags[PowerTags.length-1].innerText = tagText;
-    }
-    var theme = WeaknessTagTexts["id"+(ID_index+1)];
-    for(var i=0; i<theme.length; i++){
-      var tagText = theme[i];
-      WeaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
-      newPlusDiv(WeaknessPlusDiv, "-");
-      WeaknessTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      WeaknessTags[WeaknessTags.length-1].innerText = tagText;
-    }
-  }
+function removeSaveSlot(){
+  var saveSlotChosen = document.querySelector(".saveSlots>option:checked");
+  var saveSlotOptionID = saveSlotChosen.getAttribute("id");
+  saveSlotChosen.parentNode.selectedIndex = 0;
+  saveSlotChosen.parentNode.removeChild(saveSlotChosen);
 }
-function saveThemeTypes(){
-  checkedThemeTypeIds = [];
-  document.querySelectorAll(".TypeTextBox>option:checked").forEach(checkedOption => {
-    console.log(checkedOption.getAttribute("id"));
-    checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option",""));
-    checkedThemeTypeIds.push(checkedThemeTypeId);
-  });;
-  console.log(checkedThemeTypeIds);
-  window.localStorage.setItem("checkedThemeTypeIds", checkedThemeTypeIds);
-
-  themeTypeIndicators = [];
-  document.querySelectorAll(".theme").forEach(theme => {
-    themeTypeClass = theme.getAttribute("class");
-    themeTypeIndicator = themeTypeClass.substring(themeTypeClass.indexOf(" ")+1, themeTypeClass.length);
-    if(themeTypeIndicator=="logos"){
-      themeTypeIndicators.push(0);
-    }
-    else if(themeTypeIndicator=="mythos"){ 
-      themeTypeIndicators.push(1);
-    }
-  });
-  console.log(themeTypeIndicators);
-  window.localStorage.setItem("themeTypeIndicators", themeTypeIndicators);
-}
-

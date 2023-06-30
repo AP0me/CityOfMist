@@ -11,8 +11,8 @@
       <div class="table">
         <div id="theme1" class="theme logos">
           <div id="id1" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
-            <select class="TypeTextBox" onchange="displayQuestions(this)">
+            <div class="TypeHeader logos" onclick="ChangeThemeML(this)">_Logos_</div>
+            <select class="TypeTextBox" onchange="displayQuestions()">
             </select>
           </div>
           <div id="id1" class="Title" contenteditable="true">Searching for the lost</div>
@@ -51,7 +51,7 @@
         </div>
         <div id="theme2" class="theme logos">
           <div id="id2" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
+            <div class="TypeHeader logos" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select>
           </div>
@@ -91,7 +91,7 @@
         </div>
         <div id="theme3" class="theme logos">
           <div id="id3" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
+            <div class="TypeHeader logos" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select> 
           </div>
@@ -131,7 +131,7 @@
         </div>
         <div id="theme4" class="theme logos">
           <div id="id4" class="Type">
-            <div class="TypeHeader" onclick="ChangeThemeML(this)">_Logos_</div>
+            <div class="TypeHeader logos" onclick="ChangeThemeML(this)">_Logos_</div>
             <select class="TypeTextBox" onchange="displayQuestions(this)">
             </select>
           </div>
@@ -173,11 +173,21 @@
     </div>
     <div class="resizebar" onscroll="resizeTable(this)"><div class="resizebar-inground"></div></div>
     <div class="bottomHalfRoot">
-      <select class="bottomHalfSelect" onchange="bottomHalfSelector(this)">
-        <option id="option1">PowerTag Helper</option>
-        <option id="option2">Common Tricks</option>
-        <option id="option3">Roll Dice</option>
-      </select>
+      <div class="topOfBottomHalfRoot">
+        <select class="bottomHalfSelect" onchange="bottomHalfSelector(this)">
+          <option id="option1">PowerTag Helper</option>
+          <option id="option2">Common Tricks</option>
+          <option id="option3">Roll Dice</option>
+        </select>
+        <button onclick="saveThemeData()">Save Theme</button>
+        <button onclick="loadThemeData()">Load Theme</button>
+        <select class="saveSlots">
+          <option disabled selected hidden>Choose a Save Slot</option>
+        </select>
+        <input type="text" class="saveSlotName" placeholder="Save Slot name">
+        <button onclick="newSaveSlot()">Add new Save Slot</button>
+        <button onclick="removeSaveSlot()">Remove Save Slot</button>
+      </div>
       <div class="tagQuestionContainer hideable" visible="id1">
         <div class="tagQuestionContainer1" id="id1">
           <div class="PowerQuestions"></div>
@@ -205,4 +215,5 @@
     </div>
   </div>
   <script src="themes.js"></script>
+  <script src="themesDataSL.js"></script>
 <body></html>
