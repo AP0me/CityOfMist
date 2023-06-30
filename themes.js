@@ -532,7 +532,15 @@ function newSaveSlot(){
   saveSlots.appendChild(newSlotOption);
 }
 function removeSaveSlot(){
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   var saveSlotChosen = document.querySelector(".saveSlots>option:checked");
   saveSlotChosen.parentNode.selectedIndex = 0;
   saveSlotChosen.parentNode.removeChild(saveSlotChosen);
+  window.localStorage.removeItem(IDsaveSlotChosen+" PowerTags");
+  window.localStorage.removeItem(IDsaveSlotChosen+" WeaknessTags");
+  window.localStorage.removeItem(IDsaveSlotChosen+" themeTypeIndicators");
+  window.localStorage.removeItem(IDsaveSlotChosen+" checkedThemeTypeIds");
+  window.localStorage.removeItem(IDsaveSlotChosen+" titleText");
+  window.localStorage.removeItem(IDsaveSlotChosen+" textBoxText");
+  window.localStorage.removeItem(IDsaveSlotChosen+" Checkboxes");
 }

@@ -262,14 +262,20 @@ function loadCheckboxes(){
   }
 }
 function saveThemeData(){
-  saveThemeTypes();
-  saveThemeTitleAndMystery();
-  saveCheckboxes();
-  saveTags();
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  if(IDsaveSlotChosen!=null){
+    saveThemeTypes();
+    saveThemeTitleAndMystery();
+    saveCheckboxes();
+    saveTags();
+  }
 }
 function loadThemeData(){
-  loadThemeTypes();
-  loadThemeTitleAndMystery();
-  loadCheckboxes();
-  loadTags();
+  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  if(IDsaveSlotChosen!=null){
+    loadThemeTypes();
+    loadThemeTitleAndMystery();
+    loadCheckboxes();
+    loadTags();
+  }
 }
