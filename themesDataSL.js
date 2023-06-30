@@ -1,3 +1,5 @@
+let IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+
 function saveTags(){
   var allPowerTags = {
     "id1": {
@@ -71,8 +73,8 @@ function saveTags(){
     allWeaknessTags["id" + (k+1)]["questionLetter"] = elemLetterList;
     allWeaknessTags["id" + (k+1)]["burned"] = elemBurnedList;
   }
-  window.localStorage.setItem("PowerTags", JSON.stringify(allPowerTags));
-  window.localStorage.setItem("WeaknessTags", JSON.stringify(allWeaknessTags));
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
 }
 function loadTags(){
   translatorDict = {
@@ -125,7 +127,7 @@ function saveThemeTypes(){
     checkedThemeTypeIds.push(checkedThemeTypeId);
   });;
   checkedThemeTypeIds = JSON.stringify({ "a": checkedThemeTypeIds }); 
-  window.localStorage.setItem("checkedThemeTypeIds", checkedThemeTypeIds);
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
 
   themeTypeIndicators = [];
   document.querySelectorAll(".theme").forEach(theme => {
@@ -139,7 +141,7 @@ function saveThemeTypes(){
     }
   });
   themeTypeIndicators = JSON.stringify({ "a": themeTypeIndicators }); 
-  window.localStorage.setItem("themeTypeIndicators", themeTypeIndicators);
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
 }
 function loadThemeTypes(){
   themeTypeIndicators = window.localStorage.getItem("themeTypeIndicators");
@@ -178,7 +180,7 @@ function saveThemeTitleAndMystery(){
     var title = titles[i];
     titleText["title"].push(title.innerHTML);
   }
-  window.localStorage.setItem("titleText", JSON.stringify(titleText));
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" titleText", JSON.stringify(titleText));
 
   textBoxText={ "textBox": [] };
   textBoxes = document.querySelectorAll(".Mystery>.TextBox");
@@ -186,7 +188,7 @@ function saveThemeTitleAndMystery(){
     var textBox = textBoxes[i];
     textBoxText["textBox"].push(textBox.innerHTML);
   }
-  window.localStorage.setItem("textBoxText", JSON.stringify(textBoxText));
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
 }
 function loadThemeTitleAndMystery(){
   var titleText = JSON.parse(window.localStorage.getItem("titleText"));
@@ -230,7 +232,7 @@ function saveCheckboxes(){
       Checkboxes["theme"+i]["fade"].push(fadeCheck.checked);
     });
   }
-  window.localStorage.setItem("Checkboxes", JSON.stringify(Checkboxes));
+  window.localStorage.setItem("saveSlotChosen "+IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
 }
 function loadCheckboxes(){
   Checkboxes = JSON.parse(window.localStorage.getItem("Checkboxes"));
