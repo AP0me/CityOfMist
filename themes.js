@@ -560,10 +560,12 @@ function removeSaveSlot(){
   window.localStorage.removeItem(IDsaveSlotChosen+" Checkboxes");
 
   saveSlotChosenIntID = parseInt(saveSlotChosen.getAttribute("id").replace("saveSlotName"));
-  saveSlotsString = window.localStorage.getItem("saveSlots");
+  saveSlotsString = window.localStorage.getItem("saveSlotsData");
   saveSlotsData = JSON.parse(saveSlotsString);
+  console.log(saveSlotsData);
   saveSlotsData["saveSlotNames"].splice(saveSlotChosenIntID, 1);
   saveSlotsData["saveSlotIDs"].splice(saveSlotChosenIntID, 1);
+  console.log(saveSlotsData);
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
 }
 function loadSaveSlots(){
