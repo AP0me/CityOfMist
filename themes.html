@@ -180,8 +180,7 @@
           <option id="option3">Roll Dice</option>
         </select>
         <button onclick="saveThemeData()">Save Theme</button>
-        <button onclick="loadThemeData()">Load Theme</button>
-        <select class="saveSlots">
+        <select class="saveSlots" onchange="loadThemeData()">
           <option disabled selected hidden>Choose Slot</option>
         </select>
         <input type="text" class="saveSlotName" placeholder="Save Slot name">
@@ -209,6 +208,7 @@
       <div class="commonTricks hideable" visible="id0">
         <button onclick="addCommonTricks()">Add Trick</button>
         <div class="allPWs"></div>
+        <input type="text" class="trickName" placeholder="Trick Name">
         <button onclick="saveTrick()">Save Trick</button>
         <div class="actionList"></div>
       </div>
