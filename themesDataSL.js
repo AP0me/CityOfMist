@@ -48,7 +48,7 @@ function saveTags(){
   for (let k = 0; k < 4; k++){
     let elemTextList = []; let elemLetterList = []; let elemBurnedList = [];
     document.querySelectorAll(".bottomHalf>.Power#id"+(k+1)+">.PowerTagCommon").forEach(element => {
-      let elemText = element.querySelector(".powerTag").innerText;
+      let elemText = element.querySelector(".powerTag").value;
       elemTextList.push(elemText);
       let elemLetter = parseInt(element.querySelector(".questionLetter>option:checked").getAttribute("id").replace("option", ""));
       elemLetterList.push(elemLetter);
@@ -61,7 +61,7 @@ function saveTags(){
 
     elemTextList = []; elemLetterList = []; elemBurnedList = [];
     document.querySelectorAll(".bottomHalf>.Weakness#id"+(k+1)+">.PowerTagCommon").forEach(element => {
-      let elemText = element.querySelector(".powerTag").innerText;
+      let elemText = element.querySelector(".powerTag").value;
       elemTextList.push(elemText);
       let elemLetter = parseInt(element.querySelector(".questionLetter>option:checked").getAttribute("id").replace("option", ""));
       elemLetterList.push(elemLetter);
@@ -104,7 +104,7 @@ function loadTags(){
       PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
       newPlusDiv(PowerPlusDiv, translatorDict[powertagQuestionLetter[i].toString()]);
       PowerTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      PowerTags[PowerTags.length-1].innerText = tagText;
+      PowerTags[PowerTags.length-1].value = tagText;
       burnedTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
       burnedTags[i].checked = burnedTagValues[i];
     }
@@ -116,7 +116,7 @@ function loadTags(){
       WeaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
       newPlusDiv(WeaknessPlusDiv, translatorDict[weaknesstagQuestionLetter[i].toString()]);
       WeaknessTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      WeaknessTags[WeaknessTags.length-1].innerText = tagText;
+      WeaknessTags[WeaknessTags.length-1].value = tagText;
       burnedTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
       burnedTags[i].checked = burnedTagValues[i];
     }
