@@ -512,16 +512,24 @@ function addCommonTricks(){
   });
 }
 function saveTrick(){
+  saveSlotChosenIntID = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  commonTricks = window.localStorage.getItem(saveSlotChosenIntID+" commonTricks");
+  if(commonTricks==null){
+    commonTricks = {
+      "tricks": [],
+    };
+  }
+  else{
+    commonTricks = JSON.parse(commonTricks);
+  }
   commonTrick = {
-    "trickName": [],
+    "trickName": null,
     "trickPowers": [],
     "trickPowersCount": null,
     "trickWeaknesses": [],
     "trickWeaknessesCount": null,
   };
-  commonTricks = {
-    "tricks": [],
-  };
+
   trickPowersCount = 0; trickWeaknessesCount = 0;
   document.querySelectorAll(".allPWs>.PowerTagCommon").forEach(element => {
     if( element.querySelector(".burnTag:checked")!=null ){
@@ -545,11 +553,10 @@ function saveTrick(){
       commonTrick[trickType].push(elemText);
     }
   });
-  commonTrick["trickName"].push(trickName);
+  commonTrick["trickName"] = trickName;
   commonTrick["trickPowersCount"] = trickPowersCount;
   commonTrick["trickWeaknessesCount"] = trickWeaknessesCount;
   commonTricks["tricks"].push(commonTrick);
-  saveSlotChosenIntID = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   window.localStorage.setItem(saveSlotChosenIntID+" commonTricks", JSON.stringify(commonTricks));
 }
 function loadTricks(){
@@ -558,14 +565,12 @@ function loadTricks(){
   actionList = document.querySelector(".actionList");
   for (var i = 0; i < commonTricks.length; i++) {
     commonTrick = commonTricks[i];
-    console.log(commonTrick);
     for (var k = 0; k < commonTrick["trickPowersCount"]; k++) {
       thickPowerText = commonTrick["trickPowers"][k];
       divWithTagText = document.createElement("div");
       divWithTagText.setAttribute("class", "powerTag");
       divWithTagText.innerHTML = thickPowerText;
       divWithTagText.setAttribute("tagType", "power");
-      console.log(divWithTagText);
       actionList.appendChild(divWithTagText);
     }
     for (var k = 0; k < commonTrick["trickWeaknessesCount"]; k++) {
@@ -574,11 +579,9 @@ function loadTricks(){
       divWithTagText.setAttribute("class", "powerTag");
       divWithTagText.innerHTML = trickWeaknesseText;
       divWithTagText.setAttribute("tagType", "weakness");
-      console.log(divWithTagText);
       actionList.appendChild(divWithTagText);
     }
   }
-  console.log(actionList);
 }
 
 function newSaveSlot(){
@@ -620,10 +623,8 @@ function removeSaveSlot(){
   saveSlotChosenIntID = parseInt(saveSlotChosen.getAttribute("id").replace("saveSlotName"));
   saveSlotsString = window.localStorage.getItem("saveSlotsData");
   saveSlotsData = JSON.parse(saveSlotsString);
-  console.log(saveSlotsData);
   saveSlotsData["saveSlotNames"].splice(saveSlotChosenIntID, 1);
   saveSlotsData["saveSlotIDs"].splice(saveSlotChosenIntID, 1);
-  console.log(saveSlotsData);
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
 }
 function loadSaveSlots(){
