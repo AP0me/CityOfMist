@@ -76,6 +76,7 @@ function saveTags(){
   console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
   window.localStorage.setItem(IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
+  return [allPowerTags, allWeakness];
 }
 function loadTags(){
   translatorDict = {
@@ -148,6 +149,8 @@ function saveThemeTypes(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
+
+  return [checkedThemeTypeIds, themeTypeIndicators];
 }
 function loadThemeTypes(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
@@ -200,6 +203,7 @@ function saveThemeTitleAndMystery(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
+  return [titleText, textBoxText];
 }
 function loadThemeTitleAndMystery(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
@@ -247,6 +251,7 @@ function saveCheckboxes(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
+  return Checkboxes;
 }
 function loadCheckboxes(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
@@ -261,13 +266,39 @@ function loadCheckboxes(){
     });
   }
 }
+
+function postRequest(data, url){
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => { return result; })
+  .catch(error => { return ':('; });
+}
 function saveThemeData(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
+  
   if(IDsaveSlotChosen!=null){
-    saveThemeTypes();
-    saveThemeTitleAndMystery();
-    saveCheckboxes();
-    saveTags();
+    var checkedThemeTypeIds, themeTypeIndicators;
+    [checkedThemeTypeIds, themeTypeIndicators] = saveThemeTypes();
+    var titleText, textBoxText;
+    [titleText, textBoxText] = saveThemeTitleAndMystery();
+    var Checkboxes = saveCheckboxes();
+    var allPowerTags, allWeaknessTags;
+    [allPowerTags, allWeaknessTags] = saveTags();
+
+    postedData = {
+      "ThemeType": [checkedThemeTypeIds, themeTypeIndicators],
+      "TextData": [titleText, textBoxText],
+      "Checkboxes": Checkboxes,
+      "TagData": [allPowerTags, allWeakness],
+    };
+    var url = "http://localhost:5000/createHero";
+    postRequest(postedData, url);
   }
 }
 function loadThemeData(){
