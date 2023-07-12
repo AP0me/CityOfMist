@@ -2,6 +2,7 @@ var express = require('express'); var bodyParser = require('body-parser');
 var process = require('process');
 var path = require('path');
 var pg = require('pg');
+const { json } = require('body-parser');
 
 const app = express(); const port = 5000;
 app.use(bodyParser.json());
@@ -57,10 +58,11 @@ app.post('/loadUser', async(req, res) => {
   return res.send(result);
 });
 
-async function getHeroID(userID, heroName){
+async function getHeroID(userID, heroSubID){
   return new Promise((resolve, reject) => {
-    var SQLTextQuery = `SELECT id FROM cityofmist.hero WHERE hero_name=$1 and user_id=$2;`;
-    pool.query(SQLTextQuery, [heroName, userID], (err, rows, fields) => {
+    console.log(heroSubID);
+    var SQLTextQuery = `SELECT id FROM cityofmist.hero WHERE user_hero_subid=$1 and user_id=$2;`;
+    pool.query(SQLTextQuery, [heroSubID, userID], (err, rows, fields) => {
       if(err) { reject(err); return; }
       resolve(rows.rows);
     });
@@ -70,21 +72,12 @@ app.post('/loadHero', async(req, res) => {
   var themeData = req.body;
   var userName = themeData["userName"];
   var password = themeData["password"];
-  var heroName = themeData["heroName"];
+  var heroSubID = themeData["heroSubID"];
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID, heroName);
+  var heroID = await getHeroID(userID, heroSubID);
   return res.send(heroID);
 });
 
-async function getTagID(themeID){
-  return new Promise((resolve, reject) => {
-    var SQLTextQuery = `SELECT id FROM cityofmist.tag WHERE theme_id=$1`;
-    pool.query(SQLTextQuery, [themeID], (err, rows, fields) => {
-      if(err) { reject(err); return; }
-      resolve(rows.rows);
-    });
-  });
-}
 async function getThemeID(heroID){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = `SELECT id FROM cityofmist.theme WHERE hero_id=$1 LIMIT 4;`;
@@ -94,30 +87,99 @@ async function getThemeID(heroID){
     });
   });
 }
+async function getTags(themeID){
+  themePowTags = { "questionLetter": [], "text": [], "burned": [], }
+  themeWekTags = { "questionLetter": [], "text": [], "burned": [], }
+  return new Promise((resolve, reject) => {
+    var SQLTextQuery = `SELECT * FROM cityofmist.tag WHERE theme_id=$1;`;
+    pool.query(SQLTextQuery, [themeID], (err, rows, fields) => {
+      for (var k = 0; k < rows.rows.length; k++) {
+        if(rows.rows[k]["tag_type"]==0){
+          themePowTags["questionLetter"].push(rows.rows[k]["letter"]);
+          themePowTags["text"]          .push(rows.rows[k]["tag_name"]);
+          themePowTags["burned"]        .push(rows.rows[k]["burned"]);
+        } else
+        if(rows.rows[k]["tag_type"]==1){
+          themeWekTags["questionLetter"].push(rows.rows[k]["letter"]);
+          themeWekTags["text"]          .push(rows.rows[k]["tag_name"]);
+          themeWekTags["burned"]        .push(rows.rows[k]["burned"]);
+        }
+        if((k+1)==rows.rows.length){ resolve([themePowTags, themeWekTags]); }
+      }
+    });
+  });
+}
+async function getAllTags(themeIDs){
+  var allPowerTags    = { "id1": null, "id2": null, "id3": null, "id4": null, };
+  var allWeaknessTags = { "id1": null, "id2": null, "id3": null, "id4": null, };
+  return new Promise(async(resolve, reject) => {
+    for (var i=0; i<themeIDs.length; i++){
+      if((i+1)==themeIDs.length){
+        [allPowerTags["id"+(i+1)], allWeaknessTags["id"+(i+1)]] = await getTags(themeIDs[i]["id"]);
+        resolve([allPowerTags, allWeaknessTags]);
+        reject("error");
+      }
+      else{
+        [allPowerTags["id"+(i+1)], allWeaknessTags["id"+(i+1)]] = await getTags(themeIDs[i]["id"]);
+      }
+    }
+  });
+}
 app.post('/loadTheme', async(req, res) => {
-  //{ "userName": "public", "password": "password", "heroName": "Bob" }
+  // { "userName": "public", "password": "password", "heroSubID": "Bob" }
   var themeData = req.body;
-
   userName = themeData["userName"];
   password = themeData["password"];
-  heroName = themeData["heroName"];
+  heroSubID = themeData["heroSubID"];
+  console.log(heroSubID);
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID[0]["id"], heroName);
+  var heroID = await getHeroID(userID[0]["id"], heroSubID);
   var themeIDs = await getThemeID(heroID[0]["id"]);
 
-  var tagIDs=[];
-  for (var i=0; i<themeIDs.length; i++) {
-    var themeID = themeIDs[i]["id"];
-    var tagID = await getTagID(themeID);// TODO
-    tagIDs.push(tagID);
-  }
-  return res.send([themeIDs, tagIDs]);
+  themeTypeJson = { "a": [] };
+  logosMythosJson = { "a": [] };
+  titleTextJson={ "title": [] };
+  textBoxTextJson={ "textBox": [] };
+  CheckboxesJson = {
+    "theme1": { "attention": [], "fade": [], },
+    "theme2": { "attention": [], "fade": [], },
+    "theme3": { "attention": [], "fade": [], },
+    "theme4": { "attention": [], "fade": [], }
+  };
+  var SQLTextQuery = `SELECT * FROM cityofmist.theme WHERE hero_id=$1;`;
+  pool.query(SQLTextQuery, [heroID[0]["id"]], async(err, rows, fields) => {
+    if(err){ return res.status(500).json({ "error": err }); }
+    else{
+      for(var i=0; i<rows.rows.length; i++){
+        var themeType = rows.rows[i]["theme_type"];
+        themeTypeJson["a"].push(themeType);
+        var logosMythos = rows.rows[i]["logos_mythos"];
+        logosMythosJson["a"].push(logosMythos);
+        var titleText = rows.rows[i]["theme_title"];
+        titleTextJson["title"].push(titleText);
+        var textBoxText = rows.rows[i]["mystery"];
+        textBoxTextJson["textBox"].push(textBoxText);
+        var Checkboxes = rows.rows[i]["attention"];
+        CheckboxesJson["theme"+(i+1)]["attention"].push(Checkboxes.replace("{", '{"c":[').replace("}", "]}"));
+        var Checkboxes = rows.rows[i]["fade"];
+        CheckboxesJson["theme"+(i+1)]["fade"].push(Checkboxes.replace("{", '{"c":[').replace("}", "]}"));
+      }
+    }
+    [allPowerTags, allWeaknessTags] = await getAllTags(themeIDs);
+    postedData = {
+      "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
+      "TextData": [titleTextJson["title"], textBoxTextJson["textBox"]],
+      "Checkboxes": CheckboxesJson,
+      "TagData": [allPowerTags, allWeaknessTags],
+    };
+    return res.send(postedData);
+  });
 });
 app.post('/createTheme', async(req, res) => {
-  /*{ 
-      "themeData": { "LogosMythos": 0, "Type": 1, "Title": "Title", "AttentionFade": "110100", "Mystery": "Mystery"},
-      "navData": { "userName": 0, "password": "password", "heroName": "Bob" }
-    }*/
+/*{ 
+    "themeData": { "LogosMythos": 0, "Type": 1, "Title": "Title", "AttentionFade": "110100", "Mystery": "Mystery"},
+    "navData": { "userName": 0, "password": "password", "heroSubID": "Bob" }
+  }*/
   var themeData = req.body["themeData"];
   LogosMythos = themeData["LogosMythos"];
   Type = themeData["Type"];
@@ -129,10 +191,10 @@ app.post('/createTheme', async(req, res) => {
   var navData = req.body["navData"];
   var userName = navData["userName"];
   var password = navData["password"];
-  var heroName = navData["heroName"];
+  var heroSubID = navData["heroSubID"];
 
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID, heroName)[0]["id"];
+  var heroID = await getHeroID(userID, heroSubID)[0]["id"];
   var SQLTextQuery = 
   `INSERT INTO cityofmist.theme(
    logos_mythos, theme_type, attention, fade, hero_id, theme_title, mystery)
@@ -148,9 +210,9 @@ app.post('/loadTag', async(req, res) => {
   var themeData = req.body;
   var userName = themeData["userName"];
   var password = themeData["password"];
-  var heroName = themeData["heroName"];
+  var heroSubID = themeData["heroSubID"];
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID, heroName);
+  var heroID = await getHeroID(userID, heroSubID);
   var themeIDs = await getThemeID(heroID);
   return res.send(themeIDs);
 });

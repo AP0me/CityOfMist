@@ -593,7 +593,7 @@ function newSaveSlot(){
   newSlotOption.innerHTML = saveSlotName;
   saveSlots.appendChild(newSlotOption);
 
-  saveSlotsString = window.localStorage.getItem("saveSlots");
+  saveSlotsString = window.localStorage.getItem("saveSlotsData");
   if(saveSlotsString==null){
     saveSlotsData={
       "saveSlotNames": [],
@@ -627,6 +627,7 @@ function removeSaveSlot(){
   saveSlotsData["saveSlotIDs"].splice(saveSlotChosenIntID, 1);
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
 }
+
 function loadSaveSlots(){
   saveSlotsString = window.localStorage.getItem("saveSlotsData");
   if(saveSlotsString==null){
@@ -635,17 +636,19 @@ function loadSaveSlots(){
       "saveSlotIDs": [],
     }
   }
-  else{
-    saveSlotsData = JSON.parse(saveSlotsString);
-  }
+  else{ saveSlotsData = JSON.parse(saveSlotsString); }
   saveSlotNameInput = document.querySelector(".saveSlotName");
   saveSlotNames = saveSlotsData["saveSlotNames"];
+  saveSlotIDs = saveSlotsData["saveSlotIDs"];
   originalValue = saveSlotNameInput.value;
   for (var i = 0; i < saveSlotNames.length; i++){
-    var slotName = saveSlotNames[i];
-    saveSlotNameInput.value = slotName;
-    newSaveSlot();
-    saveSlotNameInput.value = originalValue;
+    var saveSlotName = saveSlotNames[i];
+    var saveSlotID = saveSlotIDs[i]
+    var saveSlots = document.querySelector(".saveSlots");
+    var newSlotOption = document.createElement("option")
+    newSlotOption.setAttribute("id", saveSlotID);
+    newSlotOption.innerHTML = saveSlotName;
+    saveSlots.appendChild(newSlotOption);
   }
 }
 loadSaveSlots();

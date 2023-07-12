@@ -73,12 +73,11 @@ function saveTags(){
     allWeaknessTags["id" + (k+1)]["burned"] = elemBurnedList;
   }
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
   window.localStorage.setItem(IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
   return [allPowerTags, allWeakness];
 }
-function loadTags(){
+function loadTags(PowerTagTexts, WeaknessTagTexts){
   translatorDict = {
     "0": "A",
     "1": "B",
@@ -91,15 +90,11 @@ function loadTags(){
     "8": "I",
     "9": "J",
   };
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  PowerTagTexts = window.localStorage.getItem(IDsaveSlotChosen+" PowerTags");
-  WeaknessTagTexts  = window.localStorage.getItem(IDsaveSlotChosen+" WeaknessTags");
-  PowerTagTexts = JSON.parse(PowerTagTexts);
-  WeaknessTagTexts  = JSON.parse(WeaknessTagTexts);
   for (var ID_index = 0; ID_index < 4; ID_index++){
     var powertagTexts = PowerTagTexts["id"+(ID_index+1)]["text"];
     var powertagQuestionLetter = PowerTagTexts["id"+(ID_index+1)]["questionLetter"];
     var burnedTagValues = PowerTagTexts["id"+(ID_index+1)]["burned"];
+
     for(var i=0; i<powertagTexts.length; i++){
       var tagText = powertagTexts[i];
       PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
@@ -107,7 +102,7 @@ function loadTags(){
       PowerTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
       PowerTags[PowerTags.length-1].value = tagText;
       burnedTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
-      burnedTags[i].checked = burnedTagValues[i];
+      burnedTags[i].checked = parseInt(burnedTagValues[i]); 
     }
     var weaknesstagTexts = WeaknessTagTexts["id"+(ID_index+1)]["text"];
     var weaknesstagQuestionLetter = WeaknessTagTexts["id"+(ID_index+1)]["questionLetter"];
@@ -119,7 +114,7 @@ function loadTags(){
       WeaknessTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
       WeaknessTags[WeaknessTags.length-1].value = tagText;
       burnedTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
-      burnedTags[i].checked = burnedTagValues[i];
+      burnedTags[i].checked = parseInt(burnedTagValues[i]);
     }
   }
 }
@@ -131,7 +126,6 @@ function saveThemeTypes(){
   });;
   checkedThemeTypeIds = JSON.stringify({ "a": checkedThemeTypeIds });
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
 
   themeTypeIndicators = [];
@@ -147,22 +141,16 @@ function saveThemeTypes(){
   });
   themeTypeIndicators = JSON.stringify({ "a": themeTypeIndicators });
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
 
   return [checkedThemeTypeIds, themeTypeIndicators];
 }
-function loadThemeTypes(){
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  themeTypeIndicators = window.localStorage.getItem(IDsaveSlotChosen+" themeTypeIndicators");
-  themeTypeIndicators = JSON.parse(themeTypeIndicators)["a"];
+function loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds){
   TypeHeaders = document.querySelectorAll(".TypeHeader");
-  checkedThemeTypeIds = window.localStorage.getItem(IDsaveSlotChosen+" checkedThemeTypeIds");
-  checkedThemeTypeIds = JSON.parse(checkedThemeTypeIds)["a"];
   themeTypes = document.querySelectorAll(".TypeTextBox");
 
   for (var i = 0; i < themeTypeIndicators.length; i++){
-    if(themeTypeIndicators[i]){
+    if(themeTypeIndicators[i]=="1"){
       if(TypeHeaders[i].getAttribute("class")=="TypeHeader logos"){
         TypeHeaders[i].click();
         themeTypes[i].selectedIndex = checkedThemeTypeIds[i] - Math.round(checkedThemeTypeIds[i] / 20) * 20;
@@ -191,7 +179,6 @@ function saveThemeTitleAndMystery(){
     titleText["title"].push(title.innerHTML);
   }
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" titleText", JSON.stringify(titleText));
 
   textBoxText={ "textBox": [] };
@@ -201,24 +188,19 @@ function saveThemeTitleAndMystery(){
     textBoxText["textBox"].push(textBox.innerHTML);
   }
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
   return [titleText, textBoxText];
 }
-function loadThemeTitleAndMystery(){
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  var titleText = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" titleText"));
+function loadThemeTitleAndMystery(titleText, textBoxText){
   var titles = document.querySelectorAll('.Title');
   for(let i=0; i < titles.length; i++){
     var title = titles[i];
-    title.innerHTML = titleText["title"][i];
+    title.innerHTML = titleText[i];
   }
-
-  var textBoxText = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" textBoxText"));
   var textBoxes = document.querySelectorAll('.Mystery>.TextBox');
   for(let i=0; i < textBoxes.length; i++){
     var textBox = textBoxes[i];
-    textBox.innerHTML = textBoxText["textBox"][i];
+    textBox.innerHTML = textBoxText[i];
   }
 }
 function saveCheckboxes(){
@@ -249,31 +231,29 @@ function saveCheckboxes(){
     });
   }
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  console.log(IDsaveSlotChosen);
   window.localStorage.setItem(IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
   return Checkboxes;
 }
-function loadCheckboxes(){
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  Checkboxes = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" Checkboxes"));
+function loadCheckboxes(Checkboxes){
   for (var i = 1; i < 5; i++){
     var k=0;
     document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Attention>.AttentionCheckContainer>.AttentionCheck").forEach(attentionCheck => {
-      attentionCheck.checked = Checkboxes["theme"+i]["attention"][k]; k++;
+      attentionCheck.checked = JSON.parse(Checkboxes["theme"+i]["attention"][0])["c"][k]; k++;
     }); k=0;
     document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Fade>.FadeCheckContainer>.FadeCheck").forEach(fadeCheck => {
-      fadeCheck.checked = Checkboxes["theme"+i]["fade"][k]; k++;
+      console.log(Checkboxes["theme"+i]["fade"][k]);
+      fadeCheck.checked =  JSON.parse(Checkboxes["theme"+i]["fade"][0])["c"][k]; k++;
     });
   }
 }
 
-function postRequest(data, url){
-  fetch(url, {
+function postRequest(data, url) {
+  return fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
   .then(response => response.json())
   .then(result => { return result; })
@@ -295,18 +275,35 @@ function saveThemeData(){
       "ThemeType": [checkedThemeTypeIds, themeTypeIndicators],
       "TextData": [titleText, textBoxText],
       "Checkboxes": Checkboxes,
-      "TagData": [allPowerTags, allWeakness],
+      "TagData": [allPowerTags, allWeaknessTags],
     };
-    var url = "http://localhost:5000/createHero";
-    postRequest(postedData, url);
+    window.localStorage.setItem(IDsaveSlotChosen+" themeData", postedData);
   }
 }
 function loadThemeData(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   if(IDsaveSlotChosen!=null){
-    loadThemeTypes();
-    loadThemeTitleAndMystery();
-    loadCheckboxes();
-    loadTags();
+    themeData = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" themeData"));
+    if(themeData){
+      console.log(themeData);
+      [checkedThemeTypeIds, themeTypeIndicators] = themeData["ThemeType"];
+      [titleText, textBoxText] = themeData["TextData"];
+      Checkboxes = themeData["Checkboxes"];
+      [allPowerTags, allWeaknessTags] = themeData["TagData"];
+      
+      loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds);
+      loadThemeTitleAndMystery(titleText, textBoxText);
+      loadCheckboxes(Checkboxes);
+      loadTags(allPowerTags, allWeaknessTags);
+    }
+    else{
+      IDsaveSlotChosenAsNum = parseInt(IDsaveSlotChosen.replace("saveSlotName", ""));
+      url = "http://localhost:5000/loadTheme";
+      postedData = { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosenAsNum };
+      (async () => {
+        themeData = await postRequest(postedData, url);
+        window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
+      })();
+    }
   }
 }
