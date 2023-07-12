@@ -241,7 +241,6 @@ function loadCheckboxes(Checkboxes){
       attentionCheck.checked = JSON.parse(Checkboxes["theme"+i]["attention"][0])["c"][k]; k++;
     }); k=0;
     document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Fade>.FadeCheckContainer>.FadeCheck").forEach(fadeCheck => {
-      console.log(Checkboxes["theme"+i]["fade"][k]);
       fadeCheck.checked =  JSON.parse(Checkboxes["theme"+i]["fade"][0])["c"][k]; k++;
     });
   }
@@ -303,6 +302,7 @@ function loadThemeData(){
       (async () => {
         themeData = await postRequest(postedData, url);
         window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
+        loadThemeData();
       })();
     }
   }
