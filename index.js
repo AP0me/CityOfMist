@@ -9,10 +9,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Frontend')));
 
-app.get('/themes.js', async(req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend/themes.js'));});
-app.get('/themesDataSL.js', async(req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend/themesDataSL.js'));});
+app.get('/js/themes.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/js/themes.js'));});
+app.get('/js/slots.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/js/slots.js'));});
+app.get('/js/themesDataSL.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/js/themesDataSL.js'));});
+app.get('/js/tricks.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/js/tricks.js'));});
 app.get('/themes.css', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/themes.css'));});
 
@@ -23,9 +27,6 @@ const pool = new pg.Pool({
   password: 'anri1551',
 });
 pool.connect();
-
-function stringToBlob(strInput) { return Buffer.from(strInput); }
-function blobToString(blob) { return blob.toString(); }
 
 app.get('/', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/themes.html'));
@@ -60,7 +61,7 @@ app.post('/loadUser', async(req, res) => {
 
 async function getHeroID(userID, heroSubID){
   return new Promise((resolve, reject) => {
-    console.log(heroSubID);
+    console.log(userID, heroSubID);
     var SQLTextQuery = `SELECT id FROM cityofmist.hero WHERE user_hero_subid=$1 and user_id=$2;`;
     pool.query(SQLTextQuery, [heroSubID, userID], (err, rows, fields) => {
       if(err) { reject(err); return; }
@@ -175,46 +176,86 @@ app.post('/loadTheme', async(req, res) => {
     return res.send(postedData);
   });
 });
-app.post('/createTheme', async(req, res) => {
-/*{ 
-    "themeData": { "LogosMythos": 0, "Type": 1, "Title": "Title", "AttentionFade": "110100", "Mystery": "Mystery"},
-    "navData": { "userName": 0, "password": "password", "heroSubID": "Bob" }
-  }*/
+
+function addTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery) {
+  return new Promise((resolve, reject) => {
+    var SQLTextQuery = 
+    `INSERT INTO cityofmist.theme(
+     logos_mythos, theme_type, attention, fade, hero_id, theme_title, mystery)
+     VALUES (CAST($1 AS bit), $2, CAST(ARRAY[$3,$4,$5] AS bit[]), CAST(ARRAY[$6,$7,$8] AS bit[]), $9, $10, $11);`
+    pool.query(SQLTextQuery, 
+      [LogosMythos, Type, (Attention[0]+0), (Attention[1]+0), (Attention[2]+0), (Fade[0]+0), (Fade[1]+0), (Fade[2]+0), heroID, Title, Mystery], (err, rows, fields) => {
+        if(err){ reject({ "error": err }); return; }
+        else{ resolve({ "success": "new Theme added" }); }
+      });
+  });
+}
+app.post('/createThemes', async(req, res) => {
   var themeData = req.body["themeData"];
-  LogosMythos = themeData["LogosMythos"];
-  Type = themeData["Type"];
-  Title = themeData["Title"];
-  AttentionFade = themeData["AttentionFade"];
-  Attention = AttentionFade.slice(0, 3);
-  Fade = AttentionFade.slice(3, 6);
-  Mystery = themeData["Mystery"];
   var navData = req.body["navData"];
   var userName = navData["userName"];
   var password = navData["password"];
   var heroSubID = navData["heroSubID"];
-
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID, heroSubID)[0]["id"];
-  var SQLTextQuery = 
-  `INSERT INTO cityofmist.theme(
-   logos_mythos, theme_type, attention, fade, hero_id, theme_title, mystery)
-   VALUES (CAST($1 AS bit),$2, CAST(ARRAY[$3,$4,$5] AS bit[]), CAST(ARRAY[$6,$7,$8] AS bit[]), $9, $10, $11);`
-  pool.query(SQLTextQuery, 
-    [LogosMythos, Type, Attention[0], Attention[1], Attention[2], Fade[0], Fade[1], Fade[2], heroID, Title, Mystery], (err, rows, fields) => {
-      if(err){ return res.status(500).json({ "error": err }); }
-      else{ return res.status(200).json({ "success": 'new Theme added' }); }
-    })
+  userID = userID[0]["id"];
+  var heroID = await getHeroID(userID, heroSubID);
+  heroID = heroID[0]["id"];
+
+  for (var i=1; i<5; i++){
+    LogosMythos = themeData["ThemeType"][1][i-1];
+    Type = themeData["ThemeType"][0][i-1];
+    Title = themeData["TextData"][0][i-1];
+    Mystery = themeData["TextData"][1][i-1];
+    AttentionFade = themeData["Checkboxes"];
+    Attention = AttentionFade["theme"+i]["attention"];
+    Fade = AttentionFade["theme"+i]["fade"];
+    statusJSONs = [];
+    statusJSON = await addTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery);
+    statusJSONs.push(statusJSON);
+  }
+  res.send(statusJSONs);
 });
 
-app.post('/loadTag', async(req, res) => {
-  var themeData = req.body;
-  var userName = themeData["userName"];
-  var password = themeData["password"];
-  var heroSubID = themeData["heroSubID"];
+function updateTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery, themeID){
+  return new Promise((resolve, reject) => {
+    var SQLTextQuery = 
+    `UPDATE cityofmist.theme SET 
+    logos_mythos=CAST($1 AS bit), theme_type=$2, attention=CAST(ARRAY[$3,$4,$5] AS bit[]), fade=CAST(ARRAY[$6,$7,$8] AS bit[]), hero_id=$9, theme_title=$10, mystery=$11
+    WHERE id = $12;`
+    pool.query(SQLTextQuery, 
+      [LogosMythos, Type, (Attention[0]+0), (Attention[1]+0), (Attention[2]+0), (Fade[0]+0), (Fade[1]+0), (Fade[2]+0), heroID, Title, Mystery, themeID], (err, rows, fields) => {
+        console.log("Theme updated")
+        if(err){ reject({ "error": err }); return; }
+        else{ resolve({ "success": "Theme updated" }); }
+      });
+  });
+}
+app.post('/updateThemes', async(req, res) => {
+  var themeData = req.body["themeData"];
+  var navData = req.body["navData"];
+  var userName = navData["userName"];
+  var password = navData["password"];
+  var heroSubID = navData["heroSubID"];
   var userID = await getUserID(userName, password);
+  userID = userID[0]["id"];
   var heroID = await getHeroID(userID, heroSubID);
+  heroID = heroID[0]["id"];
   var themeIDs = await getThemeID(heroID);
-  return res.send(themeIDs);
+
+  for (var i=1; i<5; i++){
+    LogosMythos = themeData["ThemeType"][1][i-1];
+    Type = parseInt(themeData["ThemeType"][0][i-1].toString()[1]);
+    Title = themeData["TextData"][0][i-1];
+    Mystery = themeData["TextData"][1][i-1];
+    AttentionFade = themeData["Checkboxes"];
+    Attention = AttentionFade["theme"+i]["attention"];
+    Fade = AttentionFade["theme"+i]["fade"];
+    themeID = themeIDs[i-1]["id"];
+    statusJSONs = [];
+    statusJSON = await updateTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery, themeID);
+    statusJSONs.push(statusJSON);
+  }
+  res.send(statusJSONs);
 });
 
 app.listen(port, () => {

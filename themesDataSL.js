@@ -75,7 +75,7 @@ function saveTags(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   window.localStorage.setItem(IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
   window.localStorage.setItem(IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
-  return [allPowerTags, allWeakness];
+  return [allPowerTags, allWeaknessTags];
 }
 function loadTags(PowerTagTexts, WeaknessTagTexts){
   translatorDict = {
@@ -94,7 +94,10 @@ function loadTags(PowerTagTexts, WeaknessTagTexts){
     var powertagTexts = PowerTagTexts["id"+(ID_index+1)]["text"];
     var powertagQuestionLetter = PowerTagTexts["id"+(ID_index+1)]["questionLetter"];
     var burnedTagValues = PowerTagTexts["id"+(ID_index+1)]["burned"];
-
+    PowerTagCommons = document.querySelectorAll(".Power#id"+(ID_index+1)+">.PowerTagCommon");
+    PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed PowerTags.
+      PowerTagCommon.parentNode.removeChild(PowerTagCommon);
+    });
     for(var i=0; i<powertagTexts.length; i++){
       var tagText = powertagTexts[i];
       PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
@@ -104,9 +107,14 @@ function loadTags(PowerTagTexts, WeaknessTagTexts){
       burnedTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
       burnedTags[i].checked = parseInt(burnedTagValues[i]); 
     }
+
     var weaknesstagTexts = WeaknessTagTexts["id"+(ID_index+1)]["text"];
     var weaknesstagQuestionLetter = WeaknessTagTexts["id"+(ID_index+1)]["questionLetter"];
     var burnedTagValues = WeaknessTagTexts["id"+(ID_index+1)]["burned"];
+    PowerTagCommons = document.querySelectorAll(".Weakness#id"+(ID_index+1)+">.PowerTagCommon");
+    PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed WeaknessTags.
+      PowerTagCommon.parentNode.removeChild(PowerTagCommon);
+    });
     for(var i=0; i<weaknesstagTexts.length; i++){
       var tagText = weaknesstagTexts[i];
       WeaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
@@ -124,7 +132,8 @@ function saveThemeTypes(){
     checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option",""));
     checkedThemeTypeIds.push(checkedThemeTypeId);
   });;
-  checkedThemeTypeIds = JSON.stringify({ "a": checkedThemeTypeIds });
+  returnCheckedThemeTypeIds = { "a": checkedThemeTypeIds }
+  checkedThemeTypeIds = JSON.stringify(returnCheckedThemeTypeIds);
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   window.localStorage.setItem(IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
 
@@ -139,11 +148,12 @@ function saveThemeTypes(){
       themeTypeIndicators.push(1);
     }
   });
-  themeTypeIndicators = JSON.stringify({ "a": themeTypeIndicators });
+  returnThemeTypeIndicators = { "a": themeTypeIndicators };
+  themeTypeIndicators = JSON.stringify(returnThemeTypeIndicators);
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   window.localStorage.setItem(IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
 
-  return [checkedThemeTypeIds, themeTypeIndicators];
+  return [returnCheckedThemeTypeIds, returnThemeTypeIndicators];
 }
 function loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds){
   TypeHeaders = document.querySelectorAll(".TypeHeader");
@@ -262,21 +272,24 @@ function saveThemeData(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   
   if(IDsaveSlotChosen!=null){
-    var checkedThemeTypeIds, themeTypeIndicators;
-    [checkedThemeTypeIds, themeTypeIndicators] = saveThemeTypes();
-    var titleText, textBoxText;
-    [titleText, textBoxText] = saveThemeTitleAndMystery();
-    var Checkboxes = saveCheckboxes();
-    var allPowerTags, allWeaknessTags;
+    [themeTypeJson, logosMythosJson] = saveThemeTypes();
+    [titleTextJson, textBoxTextJson] = saveThemeTitleAndMystery();
+    var CheckboxesJson = saveCheckboxes();
     [allPowerTags, allWeaknessTags] = saveTags();
-
-    postedData = {
-      "ThemeType": [checkedThemeTypeIds, themeTypeIndicators],
-      "TextData": [titleText, textBoxText],
-      "Checkboxes": Checkboxes,
+    themeData = {
+      "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
+      "TextData": [titleTextJson["title"], textBoxTextJson["textBox"]],
+      "Checkboxes": CheckboxesJson,
       "TagData": [allPowerTags, allWeaknessTags],
     };
-    window.localStorage.setItem(IDsaveSlotChosen+" themeData", postedData);
+    window.localStorage.setItem(IDsaveSlotChosen+" themeData", themeData);
+
+    postData = {
+      "themeData": themeData,
+      "navData": { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosen.replace("saveSlotName", "") }
+    }
+    url = "http://localhost:5000/updateThemes"
+    postRequest(postData, url);
   }
 }
 function loadThemeData(){
