@@ -160,10 +160,16 @@ app.post('/loadTheme', async(req, res) => {
         titleTextJson["title"].push(titleText);
         var textBoxText = rows.rows[i]["mystery"];
         textBoxTextJson["textBox"].push(textBoxText);
-        var Checkboxes = rows.rows[i]["attention"];
-        CheckboxesJson["theme"+(i+1)]["attention"].push(Checkboxes.replace("{", '{"c":[').replace("}", "]}"));
-        var Checkboxes = rows.rows[i]["fade"];
-        CheckboxesJson["theme"+(i+1)]["fade"].push(Checkboxes.replace("{", '{"c":[').replace("}", "]}"));
+        var Attention = rows.rows[i]["attention"];
+        var Fade = rows.rows[i]["fade"];
+        for (var k = 0; k < 3; k++){
+          CheckboxesJson["theme"+(i+1)]["attention"].push(
+            JSON.parse(Attention.replace("{", '{"c":[').replace("}", "]}"))["c"][k]
+          );
+          CheckboxesJson["theme"+(i+1)]["fade"].push(
+            JSON.parse(Fade.replace("{", '{"c":[').replace("}", "]}"))["c"][k]
+          );   
+        }
       }
     }
     [allPowerTags, allWeaknessTags] = await getAllTags(themeIDs);
@@ -177,60 +183,69 @@ app.post('/loadTheme', async(req, res) => {
   });
 });
 
-function addTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery) {
+function addTheme(
+  LogosMythos1, Type1, Attention1, Fade1, heroID, Title1, Mystery1,
+  LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2,
+  LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3,
+  LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4
+  ){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = 
-    `INSERT INTO cityofmist.theme(
-     logos_mythos, theme_type, attention, fade, hero_id, theme_title, mystery)
-     VALUES (CAST($1 AS bit), $2, CAST(ARRAY[$3,$4,$5] AS bit[]), CAST(ARRAY[$6,$7,$8] AS bit[]), $9, $10, $11);`
+    `CALL cityofmist."sp_addTheme"(
+      $1,   $2,   $3,   $4,   $5,   $6,   $7,   $8,   $9,   $10,  $11,  $12,
+      $13,  $14,  $15,  $16,  $17,  $18,  $19,  $20,  $21,  $22,  $23,  $24,
+      $25,  $26,  $27,  $28,  $29,  $30,  $31,  $32,  $33,  $34,  $35,  $36,
+      $37,  $38,  $39,  $40,  $41
+    );`
     pool.query(SQLTextQuery, 
-      [LogosMythos, Type, (Attention[0]+0), (Attention[1]+0), (Attention[2]+0), (Fade[0]+0), (Fade[1]+0), (Fade[2]+0), heroID, Title, Mystery], (err, rows, fields) => {
+      [
+        LogosMythos1,LogosMythos2,LogosMythos3,LogosMythos4, Type1, Type2, Type3, Type4, 
+        (Attention1[0]+0), (Attention1[1]+0), (Attention1[2]+0), 
+        (Attention2[0]+0), (Attention2[1]+0), (Attention2[2]+0), 
+        (Attention3[0]+0), (Attention3[1]+0), (Attention3[2]+0), 
+        (Attention4[0]+0), (Attention4[1]+0), (Attention4[2]+0), 
+        (Fade1[0]+0), (Fade1[1]+0), (Fade1[2]+0), (Fade2[0]+0), (Fade2[1]+0), (Fade2[2]+0), 
+        (Fade3[0]+0), (Fade3[1]+0), (Fade3[2]+0), (Fade4[0]+0), (Fade4[1]+0), (Fade4[2]+0), 
+        heroID, Title1, Title2, Title3, Title4, Mystery1, Mystery2, Mystery3, Mystery4
+      ], (err, rows, fields) => {
         if(err){ reject({ "error": err }); return; }
         else{ resolve({ "success": "new Theme added" }); }
       });
   });
 }
-app.post('/createThemes', async(req, res) => {
-  var themeData = req.body["themeData"];
-  var navData = req.body["navData"];
-  var userName = navData["userName"];
-  var password = navData["password"];
-  var heroSubID = navData["heroSubID"];
-  var userID = await getUserID(userName, password);
-  userID = userID[0]["id"];
-  var heroID = await getHeroID(userID, heroSubID);
-  heroID = heroID[0]["id"];
-
-  for (var i=1; i<5; i++){
-    LogosMythos = themeData["ThemeType"][1][i-1];
-    Type = themeData["ThemeType"][0][i-1];
-    Title = themeData["TextData"][0][i-1];
-    Mystery = themeData["TextData"][1][i-1];
-    AttentionFade = themeData["Checkboxes"];
-    Attention = AttentionFade["theme"+i]["attention"];
-    Fade = AttentionFade["theme"+i]["fade"];
-    statusJSONs = [];
-    statusJSON = await addTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery);
-    statusJSONs.push(statusJSON);
-  }
-  res.send(statusJSONs);
-});
-
-function updateTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery, themeID){
+function updateTheme(
+  LogosMythos1, Type1, Attention1, Fade1, Title1, Mystery1, themeID1,
+  LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2, themeID2,
+  LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3, themeID3,
+  LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4, themeID4
+  ){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = 
-    `UPDATE cityofmist.theme SET 
-    logos_mythos=CAST($1 AS bit), theme_type=$2, attention=CAST(ARRAY[$3,$4,$5] AS bit[]), fade=CAST(ARRAY[$6,$7,$8] AS bit[]), hero_id=$9, theme_title=$10, mystery=$11
-    WHERE id = $12;`
+    `CALL cityofmist."sp_updateTheme"(
+      $1,   $2,   $3,   $4,   $5,   $6,   $7,   $8,   $9,   $10,  $11,  $12,
+      $13,  $14,  $15,  $16,  $17,  $18,  $19,  $20,  $21,  $22,  $23,  $24,
+      $25,  $26,  $27,  $28,  $29,  $30,  $31,  $32,  $33,  $34,  $35,  $36,
+      $37,  $38,  $39,  $40,  $41,  $42,  $43,  $44
+    );`
     pool.query(SQLTextQuery, 
-      [LogosMythos, Type, (Attention[0]+0), (Attention[1]+0), (Attention[2]+0), (Fade[0]+0), (Fade[1]+0), (Fade[2]+0), heroID, Title, Mystery, themeID], (err, rows, fields) => {
-        console.log("Theme updated")
+      [
+        LogosMythos1,LogosMythos2,LogosMythos3,LogosMythos4, Type1, Type2, Type3, Type4, 
+        (Attention1[0]+0), (Attention1[1]+0), (Attention1[2]+0), 
+        (Attention2[0]+0), (Attention2[1]+0), (Attention2[2]+0), 
+        (Attention3[0]+0), (Attention3[1]+0), (Attention3[2]+0), 
+        (Attention4[0]+0), (Attention4[1]+0), (Attention4[2]+0), 
+        (Fade1[0]+0), (Fade1[1]+0), (Fade1[2]+0), (Fade2[0]+0), (Fade2[1]+0), (Fade2[2]+0), 
+        (Fade3[0]+0), (Fade3[1]+0), (Fade3[2]+0), (Fade4[0]+0), (Fade4[1]+0), (Fade4[2]+0), 
+        Title1, Title2, Title3, Title4, Mystery1, Mystery2, Mystery3, Mystery4,
+        themeID1, themeID2, themeID3, themeID4
+      ], (err, rows, fields) => {
+        console.log(err);
         if(err){ reject({ "error": err }); return; }
-        else{ resolve({ "success": "Theme updated" }); }
+        else{ resolve({ "success": "new Theme added" }); }
       });
   });
 }
-app.post('/updateThemes', async(req, res) => {
+app.post('/saveThemes', async(req, res) => {
   var themeData = req.body["themeData"];
   var navData = req.body["navData"];
   var userName = navData["userName"];
@@ -242,20 +257,54 @@ app.post('/updateThemes', async(req, res) => {
   heroID = heroID[0]["id"];
   var themeIDs = await getThemeID(heroID);
 
-  for (var i=1; i<5; i++){
-    LogosMythos = themeData["ThemeType"][1][i-1];
-    Type = parseInt(themeData["ThemeType"][0][i-1].toString()[1]);
-    Title = themeData["TextData"][0][i-1];
-    Mystery = themeData["TextData"][1][i-1];
-    AttentionFade = themeData["Checkboxes"];
-    Attention = AttentionFade["theme"+i]["attention"];
-    Fade = AttentionFade["theme"+i]["fade"];
-    themeID = themeIDs[i-1]["id"];
-    statusJSONs = [];
-    statusJSON = await updateTheme(LogosMythos, Type, Attention, Fade, heroID, Title, Mystery, themeID);
-    statusJSONs.push(statusJSON);
+  themeID1 = themeIDs[0]["id"];
+  themeID2 = themeIDs[1]["id"];
+  themeID3 = themeIDs[2]["id"];
+  themeID4 = themeIDs[3]["id"];
+  LogosMythos1 = themeData["ThemeType"][1][0];
+  LogosMythos2 = themeData["ThemeType"][1][1];
+  LogosMythos3 = themeData["ThemeType"][1][2];
+  LogosMythos4 = themeData["ThemeType"][1][3];
+  Type1 = themeData["ThemeType"][0][0];
+  Type2 = themeData["ThemeType"][0][1];
+  Type3 = themeData["ThemeType"][0][2];
+  Type4 = themeData["ThemeType"][0][3];
+  Title1 = themeData["TextData"][0][0];
+  Title2 = themeData["TextData"][0][1];
+  Title3 = themeData["TextData"][0][2];
+  Title4 = themeData["TextData"][0][3];
+  Mystery1 = themeData["TextData"][1][0];
+  Mystery2 = themeData["TextData"][1][1];
+  Mystery3 = themeData["TextData"][1][2];
+  Mystery4 = themeData["TextData"][1][3];
+  AttentionFade = themeData["Checkboxes"];
+  Attention1 = AttentionFade["theme"+1]["attention"];
+  Attention2 = AttentionFade["theme"+2]["attention"];
+  Attention3 = AttentionFade["theme"+3]["attention"];
+  Attention4 = AttentionFade["theme"+4]["attention"];
+  Fade1 = AttentionFade["theme"+1]["fade"];
+  Fade2 = AttentionFade["theme"+2]["fade"];
+  Fade3 = AttentionFade["theme"+3]["fade"];
+  Fade4 = AttentionFade["theme"+4]["fade"];
+
+  if(0){
+    await addTheme(
+      LogosMythos1, Type1, Attention1, Fade1, heroID, Title1, Mystery1,
+      LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2,
+      LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3,
+      LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4
+    );
+    res.send("theme Added");
   }
-  res.send(statusJSONs);
+  else{
+    await updateTheme(
+      LogosMythos1, Type1, Attention1, Fade1, Title1, Mystery1, themeID1,
+      LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2, themeID2,
+      LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3, themeID3,
+      LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4, themeID4
+    );
+    res.send("theme Updated");
+  }
 });
 
 app.listen(port, () => {

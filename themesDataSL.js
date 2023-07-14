@@ -72,9 +72,6 @@ function saveTags(){
     allWeaknessTags["id" + (k+1)]["questionLetter"] = elemLetterList;
     allWeaknessTags["id" + (k+1)]["burned"] = elemBurnedList;
   }
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" PowerTags", JSON.stringify(allPowerTags));
-  window.localStorage.setItem(IDsaveSlotChosen+" WeaknessTags", JSON.stringify(allWeaknessTags));
   return [allPowerTags, allWeaknessTags];
 }
 function loadTags(PowerTagTexts, WeaknessTagTexts){
@@ -129,13 +126,10 @@ function loadTags(PowerTagTexts, WeaknessTagTexts){
 function saveThemeTypes(){
   checkedThemeTypeIds = [];
   document.querySelectorAll(".TypeTextBox>option:checked").forEach(checkedOption => {
-    checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option",""));
+    checkedThemeTypeId = parseInt(checkedOption.getAttribute("id").replace("option","")[1]);
     checkedThemeTypeIds.push(checkedThemeTypeId);
   });;
   returnCheckedThemeTypeIds = { "a": checkedThemeTypeIds }
-  checkedThemeTypeIds = JSON.stringify(returnCheckedThemeTypeIds);
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" checkedThemeTypeIds", checkedThemeTypeIds);
 
   themeTypeIndicators = [];
   document.querySelectorAll(".theme").forEach(theme => {
@@ -149,10 +143,6 @@ function saveThemeTypes(){
     }
   });
   returnThemeTypeIndicators = { "a": themeTypeIndicators };
-  themeTypeIndicators = JSON.stringify(returnThemeTypeIndicators);
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" themeTypeIndicators", themeTypeIndicators);
-
   return [returnCheckedThemeTypeIds, returnThemeTypeIndicators];
 }
 function loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds){
@@ -188,8 +178,6 @@ function saveThemeTitleAndMystery(){
     var title = titles[i];
     titleText["title"].push(title.innerHTML);
   }
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" titleText", JSON.stringify(titleText));
 
   textBoxText={ "textBox": [] };
   textBoxes = document.querySelectorAll(".Mystery>.TextBox");
@@ -197,8 +185,6 @@ function saveThemeTitleAndMystery(){
     var textBox = textBoxes[i];
     textBoxText["textBox"].push(textBox.innerHTML);
   }
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" textBoxText", JSON.stringify(textBoxText));
   return [titleText, textBoxText];
 }
 function loadThemeTitleAndMystery(titleText, textBoxText){
@@ -240,22 +226,21 @@ function saveCheckboxes(){
       Checkboxes["theme"+i]["fade"].push(fadeCheck.checked);
     });
   }
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
-  window.localStorage.setItem(IDsaveSlotChosen+" Checkboxes", JSON.stringify(Checkboxes));
   return Checkboxes;
 }
 function loadCheckboxes(Checkboxes){
   for (var i = 1; i < 5; i++){
     var k=0;
-    document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Attention>.AttentionCheckContainer>.AttentionCheck").forEach(attentionCheck => {
-      attentionCheck.checked = JSON.parse(Checkboxes["theme"+i]["attention"][0])["c"][k]; k++;
+    document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Attention>.AttentionCheckContainer>.AttentionCheck")
+    .forEach(attentionCheck => {
+      attentionCheck.checked = Checkboxes["theme"+i]["attention"][k]; k++;
     }); k=0;
-    document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Fade>.FadeCheckContainer>.FadeCheck").forEach(fadeCheck => {
-      fadeCheck.checked =  JSON.parse(Checkboxes["theme"+i]["fade"][0])["c"][k]; k++;
+    document.querySelectorAll(".theme#theme"+i+">.checkAttentionFade>.Fade>.FadeCheckContainer>.FadeCheck")
+    .forEach(fadeCheck => {
+      fadeCheck.checked = Checkboxes["theme"+i]["fade"][k]; k++;
     });
   }
 }
-
 function postRequest(data, url) {
   return fetch(url, {
     method: 'POST',
@@ -282,13 +267,13 @@ function saveThemeData(){
       "Checkboxes": CheckboxesJson,
       "TagData": [allPowerTags, allWeaknessTags],
     };
-    window.localStorage.setItem(IDsaveSlotChosen+" themeData", themeData);
+    window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
 
     postData = {
       "themeData": themeData,
       "navData": { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosen.replace("saveSlotName", "") }
     }
-    url = "http://localhost:5000/updateThemes"
+    url = "http://localhost:5000/saveThemes"
     postRequest(postData, url);
   }
 }
