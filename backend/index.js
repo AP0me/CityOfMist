@@ -243,6 +243,7 @@ function updateTheme(
       });
   });
 }
+
 function areThemesDefined(heroID){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = 
@@ -257,6 +258,7 @@ function areThemesDefined(heroID){
     });
   });
 }
+
 app.post('/saveThemes', async(req, res) => {
   var themeData = req.body["themeData"];
   var navData = req.body["navData"];
