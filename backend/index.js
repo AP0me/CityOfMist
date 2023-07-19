@@ -1,3 +1,4 @@
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 var express = require('express'); var bodyParser = require('body-parser');
 var process = require('process');
 var path = require('path');
@@ -19,6 +20,14 @@ app.get('/js/tricks.js', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/js/tricks.js'));});
 app.get('/themes.css', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/themes.css'));});
+app.get('/manifest.json', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/manifest.json'));});
+app.get('/icon.png', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/icon.png'));});
+app.get('/serviceWorker.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/serviceWorker.js'));});
+app.get('/js/fetchPost.js', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/js/fetchPost.js'));});
 
 const pool = new pg.Pool({
   user: 'postgres',
@@ -35,7 +44,6 @@ app.get('/', async(req, res) => {
 app.post('/storeUserName', async (req, res) => {
   var themeData = req.body;
   userName = themeData['userName']
-  // Insert the Blob into the database
   var SQLTextQuery = `INSERT INTO cityofmist.t_user (user_name, password) VALUES ($1, $2);`;
   var result = await pool.query(SQLTextQuery, [userName, "password"]);
   if(err){ return res.status(500).json({ "error": 'failed to add user into the database' }); }
@@ -78,6 +86,27 @@ app.post('/loadHero', async(req, res) => {
   return res.send(heroID);
 });
 
+async function addHero(userID, heroName, heroSubID){
+  return new Promise((resolve, reject) => {
+    var SQLTextQuery = `INSERT INTO cityofmist.hero (user_id, hero_name, user_hero_subid) VALUES ($1, $2, $3);`;
+    pool.query(SQLTextQuery, [userID, heroName, heroSubID], (err, rows, fields) => {
+      if(err) { reject(err); return; }
+      resolve(rows.rows);
+    });
+  });
+}
+app.post('/addHero', async(req, res) => {
+  var themeData = req.body;
+  var userName  = themeData["userName"];
+  var password  = themeData["password"];
+  var heroSubID = themeData["heroSubID"];
+  var heroName  = themeData["heroName"];
+  var userID = await getUserID(userName, password);
+  await addHero(userID, heroName, heroSubID);
+
+  return res.send(heroID);
+});
+
 async function getThemeID(heroID){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = `SELECT id FROM cityofmist.theme WHERE hero_id=$1 LIMIT 4;`;
@@ -92,14 +121,15 @@ async function getTags(themeID){
   themeWekTags = { "questionLetter": [], "text": [], "burned": [], }
   return new Promise((resolve, reject) => {
     var SQLTextQuery = `SELECT * FROM cityofmist.tag WHERE theme_id=$1;`;
+    console.log(themeID);
     pool.query(SQLTextQuery, [themeID], (err, rows, fields) => {
       for (var k = 0; k < rows.rows.length; k++) {
         if(rows.rows[k]["tag_type"]==0){
           themePowTags["questionLetter"].push(rows.rows[k]["letter"]);
           themePowTags["text"]          .push(rows.rows[k]["tag_name"]);
           themePowTags["burned"]        .push(rows.rows[k]["burned"]);
-        } else
-        if(rows.rows[k]["tag_type"]==1){
+        }
+        else if(rows.rows[k]["tag_type"]==1){
           themeWekTags["questionLetter"].push(rows.rows[k]["letter"]);
           themeWekTags["text"]          .push(rows.rows[k]["tag_name"]);
           themeWekTags["burned"]        .push(rows.rows[k]["burned"]);
@@ -116,6 +146,7 @@ async function getAllTags(themeIDs){
     for (var i=0; i<themeIDs.length; i++){
       if((i+1)==themeIDs.length){
         [allPowerTags["id"+(i+1)], allWeaknessTags["id"+(i+1)]] = await getTags(themeIDs[i]["id"]);
+        console.log("jojo")
         resolve([allPowerTags, allWeaknessTags]);
         reject("error");
       }
@@ -170,6 +201,7 @@ app.post('/loadTheme', async(req, res) => {
         }
       }
     }
+    var allPowerTags = undefined; var allWeaknessTags = undefined;
     [allPowerTags, allWeaknessTags] = await getAllTags(themeIDs);
     postedData = {
       "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
@@ -181,21 +213,44 @@ app.post('/loadTheme', async(req, res) => {
   });
 });
 
-function addTheme(
+async function addTags(themeID){
+  
+}
+async function addTheme(
   LogosMythos1, Type1, Attention1, Fade1, heroID, Title1, Mystery1,
   LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2,
   LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3,
-  LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4
+  LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4,
+  tagData
   ){
-  return new Promise((resolve, reject) => {
+    tagData = [
+      {
+        id1: { questionLetter: ['A','A','A','A'], text: ["p1","p2","p3","p4"], burned: [1,0,0,1] },
+        id2: { questionLetter: ['A','A','A'],     text: ["p5","p6","p7"],      burned: [1,0,0] },
+        id3: { questionLetter: ['A','A'],         text: ["p8","p9"],           burned: [1,0] },
+        id4: { questionLetter: ['A','A','A'],     text: ["p10","p11","p12"],      burned: [1,0,0] }
+      },
+      {
+        id1: { questionLetter: [], text: [], burned: [] },
+        id2: { questionLetter: [], text: [], burned: [] },
+        id3: { questionLetter: [], text: [], burned: [] },
+        id4: { questionLetter: [], text: [], burned: [] }
+      }
+    ]
+    return new Promise(async(resolve, reject) => {
+    var themeQuerryDone = 0; var tagQuerryDone = 0;
     var SQLTextQuery = 
     `CALL cityofmist."sp_addTheme"(
       $1,   $2,   $3,   $4,   $5,   $6,   $7,   $8,   $9,   $10,  $11,  $12,
       $13,  $14,  $15,  $16,  $17,  $18,  $19,  $20,  $21,  $22,  $23,  $24,
       $25,  $26,  $27,  $28,  $29,  $30,  $31,  $32,  $33,  $34,  $35,  $36,
-      $37,  $38,  $39,  $40,  $41
+      $37,  $38,  $39,  $40,  $41,  
+      $42,  $43,  $44,  $45,
+      $46,  $47,  $48,  $49,
+      $50,  $51,  $52,  $53,
+      $54,  $55,  $56,  $57
     );`
-    pool.query(SQLTextQuery, 
+    await pool.query(SQLTextQuery, 
       [
         LogosMythos1,LogosMythos2,LogosMythos3,LogosMythos4, Type1, Type2, Type3, Type4, 
         (Attention1[0]+0), (Attention1[1]+0), (Attention1[2]+0), 
@@ -204,14 +259,25 @@ function addTheme(
         (Attention4[0]+0), (Attention4[1]+0), (Attention4[2]+0), 
         (Fade1[0]+0), (Fade1[1]+0), (Fade1[2]+0), (Fade2[0]+0), (Fade2[1]+0), (Fade2[2]+0), 
         (Fade3[0]+0), (Fade3[1]+0), (Fade3[2]+0), (Fade4[0]+0), (Fade4[1]+0), (Fade4[2]+0), 
-        heroID, Title1, Title2, Title3, Title4, Mystery1, Mystery2, Mystery3, Mystery4
-      ], (err, rows, fields) => {
+        heroID, Title1, Title2, Title3, Title4, Mystery1, Mystery2, Mystery3, Mystery4,
+        tagData[0]["id"+1]["text"].length, tagData[0]["id"+1]["burned"], tagData[0]["id"+1]["text"], tagData[0]["id"+1]["questionLetter"],
+        tagData[0]["id"+2]["text"].length, tagData[0]["id"+2]["burned"], tagData[0]["id"+2]["text"], tagData[0]["id"+2]["questionLetter"],
+        tagData[0]["id"+3]["text"].length, tagData[0]["id"+3]["burned"], tagData[0]["id"+3]["text"], tagData[0]["id"+3]["questionLetter"],
+        tagData[0]["id"+4]["text"].length, tagData[0]["id"+4]["burned"], tagData[0]["id"+4]["text"], tagData[0]["id"+4]["questionLetter"]
+      ],
+      (err, rows, fields) => {
+        console.log(err)
         if(err){ reject({ "error": err }); return; }
-        else{ resolve({ "success": "new Theme added" }); }
-      });
+        else{ themeQuerryDone=1; }
+      }
+    );
+
+    if(tagQuerryDone && themeQuerryDone){
+      resolve({ "success": "new Theme added" });
+    }
   });
 }
-function updateTheme(
+async function updateTheme(
   LogosMythos1, Type1, Attention1, Fade1, Title1, Mystery1, themeID1,
   LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2, themeID2,
   LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3, themeID3,
@@ -293,6 +359,8 @@ app.post('/saveThemes', async(req, res) => {
   Fade2 = AttentionFade["theme"+2]["fade"];
   Fade3 = AttentionFade["theme"+3]["fade"];
   Fade4 = AttentionFade["theme"+4]["fade"];
+  tagData = themeData["TagData"];
+  console.log(tagData);
 
   var themesDefined = await areThemesDefined(heroID);
   if(!themesDefined){
@@ -300,7 +368,8 @@ app.post('/saveThemes', async(req, res) => {
       LogosMythos1, Type1, Attention1, Fade1, heroID, Title1, Mystery1,
       LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2,
       LogosMythos3, Type3, Attention3, Fade3, Title3, Mystery3,
-      LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4
+      LogosMythos4, Type4, Attention4, Fade4, Title4, Mystery4,
+      tagData
     );
     res.send("theme Added");
   }
