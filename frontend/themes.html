@@ -3,8 +3,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Character builder and character manager for City Of Mist TTRPG">
+  <meta name="theme-color" content="#0006b1"/>
   <link rel="stylesheet" type="text/css" href="themes.css" />
-  </head>
+  <link rel="manifest" href="./manifest.json">
+  <title>City Of Mist ☁️🌁☁️</title>
+</head>
 <body>
   <div class="root">
     <div class="resizeme" style="height: 100%;">
@@ -213,7 +217,22 @@
       </div>
     </div>
   </div>
-  <script src="./js/themes.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('serviceWorker.js', { scope: '/' })
+      .then(
+        function(registration) {
+          console.log('Service Worker registered');
+        })
+      .catch(
+        function(error) {
+        console.log('Service Worker registration failed:', error);
+      });
+    }
+    
+  </script>
+  <script defer src="./js/fetchPost.js"></script>
+  <script defer src="./js/themes.js"></script>
   <script src="./js/themesDataSL.js"></script>
   <script src="./js/slots.js"></script>
   <script src="./js/tricks.js"></script>
