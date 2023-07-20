@@ -1,80 +1,69 @@
 
 function saveTags(){
-  var allPowerTags = {
+  allTags = {
     "id1": {
       "questionLetter": null,
       "text": null,
-      "burned": false,
+      "burned": null,
+      "tagType": null
     },
     "id2": {
       "questionLetter": null,
       "text": null,
-      "burned": false,
+      "burned": null,
+      "tagType": null
     },
     "id3": {
       "questionLetter": null,
       "text": null,
-      "burned": false,
+      "burned": null,
+      "tagType": null
     },
     "id4": {
       "questionLetter": null,
       "text": null,
-      "burned": false,
+      "burned": null,
+      "tagType": null
     }
-  };
-  var allWeaknessTags = {
-    "id1": {
-      "questionLetter": null,
-      "text": null,
-      "burned": false,
-    },
-    "id2": {
-      "questionLetter": null,
-      "text": null,
-      "burned": false,
-    },
-    "id3": {
-      "questionLetter": null,
-      "text": null,
-      "burned": false,
-    },
-    "id4": {
-      "questionLetter": null,
-      "text": null,
-      "burned": false,
-    },
   };
 
   for (let k = 0; k < 4; k++){
-    let elemTextList = []; let elemLetterList = []; let elemBurnedList = [];
+    var powerElemTextList = []; var powerElemLetterList = []; var powerElemBurnedList = []; var TagTypeList = [];
     document.querySelectorAll(".bottomHalf>.Power#id"+(k+1)+">.PowerTagCommon").forEach(element => {
-      let elemText = element.querySelector(".powerTag").value;
-      elemTextList.push(elemText);
-      let elemLetter = parseInt(element.querySelector(".questionLetter>option:checked").getAttribute("id").replace("option", ""));
-      elemLetterList.push(elemLetter);
-      let elemBurned = element.querySelector(".burnTag").checked;
-      elemBurnedList.push(elemBurned);
+      var elemText = element.querySelector(".powerTag").value;
+      powerElemTextList.push(elemText);
+      var elemLetter = parseInt(element.querySelector(".questionLetter>option:checked").getAttribute("id").replace("option", ""));
+      powerElemLetterList.push(elemLetter);
+      var elemBurned = element.querySelector(".burnTag").checked;
+      powerElemBurnedList.push(elemBurned+0);
+      TagTypeList.push(1);
     });
-    allPowerTags["id" + (k+1)]["text"] = elemTextList;
-    allPowerTags["id" + (k+1)]["questionLetter"] = elemLetterList;
-    allPowerTags["id" + (k+1)]["burned"] = elemBurnedList;
+    allTags["id" + (k+1)]["text"] = powerElemTextList;
+    allTags["id" + (k+1)]["questionLetter"] = powerElemLetterList;
+    allTags["id" + (k+1)]["burned"] = powerElemBurnedList;
+    allTags["id" + (k+1)]["tagType"] = TagTypeList;
 
-    elemTextList = []; elemLetterList = []; elemBurnedList = [];
+    var weakElemTextList = []; var weakElemLetterList = []; var weakElemBurnedList = [];
     document.querySelectorAll(".bottomHalf>.Weakness#id"+(k+1)+">.PowerTagCommon").forEach(element => {
       let elemText = element.querySelector(".powerTag").value;
-      elemTextList.push(elemText);
+      weakElemTextList.push(elemText);
       let elemLetter = parseInt(element.querySelector(".questionLetter>option:checked").getAttribute("id").replace("option", ""));
-      elemLetterList.push(elemLetter);
+      weakElemLetterList.push(elemLetter);
       let elemBurned = element.querySelector(".burnTag").checked;
-      elemBurnedList.push(elemBurned);
+      weakElemBurnedList.push(elemBurned+0);
+      TagTypeList.push(0);
     });
-    allWeaknessTags["id" + (k+1)]["text"] = elemTextList;
-    allWeaknessTags["id" + (k+1)]["questionLetter"] = elemLetterList;
-    allWeaknessTags["id" + (k+1)]["burned"] = elemBurnedList;
+
+    elemTextList   = powerElemTextList  .concat(weakElemTextList);
+    elemLetterList = powerElemLetterList.concat(weakElemLetterList);
+    elemBurnedList = powerElemBurnedList.concat(weakElemBurnedList);
+    allTags["id" + (k+1)]["text"]           = elemTextList;
+    allTags["id" + (k+1)]["questionLetter"] = elemLetterList;
+    allTags["id" + (k+1)]["burned"]         = elemBurnedList;
   }
-  return [allPowerTags, allWeaknessTags];
+  return allTags;
 }
-function loadTags(PowerTagTexts, WeaknessTagTexts){
+function loadTags(allTags){
   translatorDict = {
     "0": "A",
     "1": "B",
@@ -88,38 +77,40 @@ function loadTags(PowerTagTexts, WeaknessTagTexts){
     "9": "J",
   };
   for (var ID_index = 0; ID_index < 4; ID_index++){
-    var powertagTexts = PowerTagTexts["id"+(ID_index+1)]["text"];
-    var powertagQuestionLetter = PowerTagTexts["id"+(ID_index+1)]["questionLetter"];
-    var burnedTagValues = PowerTagTexts["id"+(ID_index+1)]["burned"];
+    var tagLength = allTags["id"+(ID_index+1)]["tagType"].length;
+    
+    var powerLength = allTags["id"+(ID_index+1)]["tagType"].filter(function(tagType){ return tagType==0; }).length;
+    var tagTexts = allTags["id"+(ID_index+1)]["text"];
+    var tagQuestionLetter = allTags["id"+(ID_index+1)]["questionLetter"];
+    var tagBurned = allTags["id"+(ID_index+1)]["burned"];
+
     PowerTagCommons = document.querySelectorAll(".Power#id"+(ID_index+1)+">.PowerTagCommon");
     PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed PowerTags.
       PowerTagCommon.parentNode.removeChild(PowerTagCommon);
-    });
-    for(var i=0; i<powertagTexts.length; i++){
-      var tagText = powertagTexts[i];
-      PowerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
-      newPlusDiv(PowerPlusDiv, translatorDict[powertagQuestionLetter[i].toString()]);
-      PowerTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      PowerTags[PowerTags.length-1].value = tagText;
-      burnedTags = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
-      burnedTags[i].checked = parseInt(burnedTagValues[i]); 
+    }); var k=0;
+    for(var i=0; i<powerLength; i++){
+      var tagText = tagTexts[i];
+      powerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
+      newPlusDiv(powerPlusDiv, translatorDict[tagQuestionLetter[i].toString()]);
+      PowerTagElems = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
+      PowerTagElems[PowerTagElems.length-1].value = tagText;
+      burnedTagElems = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
+      burnedTagElems[k].checked = parseInt(tagBurned[i]); k++;
     }
 
-    var weaknesstagTexts = WeaknessTagTexts["id"+(ID_index+1)]["text"];
-    var weaknesstagQuestionLetter = WeaknessTagTexts["id"+(ID_index+1)]["questionLetter"];
-    var burnedTagValues = WeaknessTagTexts["id"+(ID_index+1)]["burned"];
+
     PowerTagCommons = document.querySelectorAll(".Weakness#id"+(ID_index+1)+">.PowerTagCommon");
     PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed WeaknessTags.
       PowerTagCommon.parentNode.removeChild(PowerTagCommon);
-    });
-    for(var i=0; i<weaknesstagTexts.length; i++){
-      var tagText = weaknesstagTexts[i];
-      WeaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
-      newPlusDiv(WeaknessPlusDiv, translatorDict[weaknesstagQuestionLetter[i].toString()]);
-      WeaknessTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      WeaknessTags[WeaknessTags.length-1].value = tagText;
-      burnedTags = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
-      burnedTags[i].checked = parseInt(burnedTagValues[i]);
+    }); var k=0;
+    for(var i=powerLength; i<tagLength; i++){
+      var tagText = tagTexts[i];
+      weaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
+      newPlusDiv(weaknessPlusDiv, translatorDict[tagQuestionLetter[i].toString()]);
+      weaknessTagElems = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
+      weaknessTagElems[weaknessTagElems.length-1].value = tagText;
+      burnedTagElems = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
+      burnedTagElems[k].checked = parseInt(tagBurned[i]); k++;
     }
   }
 }
@@ -241,18 +232,7 @@ function loadCheckboxes(Checkboxes){
     });
   }
 }
-function postRequest(data, url) {
-  return fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(result => { return result; })
-  .catch(error => { return ':('; });
-}
+
 function saveThemeData(){
   var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   
@@ -260,12 +240,12 @@ function saveThemeData(){
     [themeTypeJson, logosMythosJson] = saveThemeTypes();
     [titleTextJson, textBoxTextJson] = saveThemeTitleAndMystery();
     var CheckboxesJson = saveCheckboxes();
-    [allPowerTags, allWeaknessTags] = saveTags();
+    allTags = saveTags();
     themeData = {
       "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
       "TextData": [titleTextJson["title"], textBoxTextJson["textBox"]],
       "Checkboxes": CheckboxesJson,
-      "TagData": [allPowerTags, allWeaknessTags],
+      "TagData": allTags,
     };
     window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
 
@@ -283,16 +263,15 @@ function loadThemeData(){
   if(IDsaveSlotChosen!=null){
     themeData = JSON.parse(window.localStorage.getItem(IDsaveSlotChosen+" themeData"));
     if(themeData){
-      console.log(themeData);
       [checkedThemeTypeIds, themeTypeIndicators] = themeData["ThemeType"];
       [titleText, textBoxText] = themeData["TextData"];
       Checkboxes = themeData["Checkboxes"];
-      [allPowerTags, allWeaknessTags] = themeData["TagData"];
+      allTags = themeData["TagData"];
       
       loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds);
       loadThemeTitleAndMystery(titleText, textBoxText);
       loadCheckboxes(Checkboxes);
-      loadTags(allPowerTags, allWeaknessTags);
+      loadTags(allTags);
     }
     else{
       IDsaveSlotChosenAsNum = parseInt(IDsaveSlotChosen.replace("saveSlotName", ""));
@@ -300,8 +279,11 @@ function loadThemeData(){
       postedData = { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosenAsNum };
       (async () => {
         themeData = await postRequest(postedData, url);
-        window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
-        loadThemeData();
+        console.log("Nooo")
+        if(themeData != ":("){
+          window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
+          loadThemeData();
+        }
       })();
     }
   }

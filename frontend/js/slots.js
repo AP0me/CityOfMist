@@ -2,9 +2,9 @@
 function newSaveSlot(){
   var saveSlots = document.querySelector(".saveSlots");
   var saveSlotName = document.querySelector(".saveSlotName").value;
-  newSlotOption = document.createElement("option")
-  newSlotOption.setAttribute("id", "saveSlotName"+(saveSlots.options.length-1));
+  newSlotOption = document.createElement("option");
   saveSlotsOptionsLength = saveSlots.options.length-1;
+  newSlotOption.setAttribute("id", "saveSlotName"+saveSlotsOptionsLength);
   newSlotOption.innerHTML = saveSlotName;
   saveSlots.appendChild(newSlotOption);
 
@@ -13,7 +13,6 @@ function newSaveSlot(){
     saveSlotsData={
       "saveSlotNames": [],
       "saveSlotIDs": [],
-      "chosenSlotID": null,
     }
     window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
   }
@@ -21,10 +20,19 @@ function newSaveSlot(){
   saveSlotsData["saveSlotNames"].push(saveSlotName);
   saveSlotsData["saveSlotIDs"].push("saveSlotName"+saveSlotsOptionsLength);
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
+
+  saveSlotsPost = {
+    "userName": "public",
+    "password": "password",
+    "heroSubID": saveSlotsOptionsLength,
+    "heroName": saveSlotName,
+  }
+  var url = "http://localhost:5000/addHero"
+  postRequest(saveSlotsPost, url);
 }
 function removeSaveSlot(){
-  var IDsaveSlotChosen = document.querySelector(".saveSlots>option:checked").getAttribute("id");
   var saveSlotChosen = document.querySelector(".saveSlots>option:checked");
+  var IDsaveSlotChosen = saveSlotChosen.getAttribute("id");
   saveSlotChosen.parentNode.selectedIndex = 0;
   saveSlotChosen.parentNode.removeChild(saveSlotChosen);
   window.localStorage.removeItem(IDsaveSlotChosen+" PowerTags");
