@@ -5,7 +5,7 @@
 -- Dumped from database version 15.3
 -- Dumped by pg_dump version 15.3
 
--- Started on 2023-07-20 21:34:23
+-- Started on 2023-07-21 20:37:57
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -163,54 +163,44 @@ BEGIN
             mystery = Mystery4
         WHERE "id" = themeid4;
 		
-		
+		DELETE FROM cityofmist.tag WHERE theme_id IN (theme_ids[0], theme_ids[1], theme_ids[2], theme_ids[3]);
 		FOR i IN 1..4 LOOP
-            FOR j IN 1..CASE i
-                           WHEN 1 THEN tagcount1
-                           WHEN 2 THEN tagcount2
-                           WHEN 3 THEN tagcount3
-                           WHEN 4 THEN tagcount4
-                       END LOOP
-                UPDATE cityofmist.tag
-                SET burned = CASE i
-                                WHEN 1 THEN burned1[j]
-                                WHEN 2 THEN burned2[j]
-                                WHEN 3 THEN burned3[j]
-                                WHEN 4 THEN burned4[j]
-                            END,
-                    tag_type = CASE i
-                                  WHEN 1 THEN tagtype1[j]
-                                  WHEN 2 THEN tagtype2[j]
-                                  WHEN 3 THEN tagtype3[j]
-                                  WHEN 4 THEN tagtype4[j]
-                              END,
-                    theme_id = CASE i
-                                   WHEN 1 THEN themeid1
-                                   WHEN 2 THEN themeid2
-                                   WHEN 3 THEN themeid3
-                                   WHEN 4 THEN themeid4
-                               END,
-                    tag_name = CASE i
-                                   WHEN 1 THEN text1[j]
-                                   WHEN 2 THEN text2[j]
-                                   WHEN 3 THEN text3[j]
-                                   WHEN 4 THEN text4[j]
-                               END,
-                    letter = CASE i
-                                 WHEN 1 THEN questionletter1[j]
-                                 WHEN 2 THEN questionletter2[j]
-                                 WHEN 3 THEN questionletter3[j]
-                                 WHEN 4 THEN questionletter4[j]
-                             END
-                    WHERE id = (SELECT id FROM cityofmist.tag WHERE theme_id=
-							 CASE i
-                                  WHEN 1 THEN themeid1
-                                  WHEN 2 THEN themeid2
-                                  WHEN 3 THEN themeid3
-                                  WHEN 4 THEN themeid4
-                              END ORDER BY id LIMIT 1 OFFSET j);
-            END LOOP;
-        END LOOP;
+			FOR j IN 1..CASE i
+				WHEN 1 THEN tagcount1
+				WHEN 2 THEN tagcount2
+				WHEN 3 THEN tagcount3
+				WHEN 4 THEN tagcount4
+			END LOOP
+				INSERT INTO cityofmist.tag (burned, tag_type, theme_id, tag_name, letter)
+				SELECT
+					CASE i
+						WHEN 1 THEN burned1[j]
+						WHEN 2 THEN burned2[j]
+						WHEN 3 THEN burned3[j]
+						WHEN 4 THEN burned4[j]
+					END,
+					CASE i
+						WHEN 1 THEN tagtype1[j]
+						WHEN 2 THEN tagtype2[j]
+						WHEN 3 THEN tagtype3[j]
+						WHEN 4 THEN tagtype4[j]
+					END,
+					theme_ids[i-1],
+					CASE i
+						WHEN 1 THEN text1[j]
+						WHEN 2 THEN text2[j]
+						WHEN 3 THEN text3[j]
+						WHEN 4 THEN text4[j]
+					END,
+					CASE i
+						WHEN 1 THEN questionletter1[j]
+						WHEN 2 THEN questionletter2[j]
+						WHEN 3 THEN questionletter3[j]
+						WHEN 4 THEN questionletter4[j]
+					END
+				FROM generate_series(1, 1);
+			END LOOP;
+		END LOOP;
         COMMIT;
     END;
 END;
@@ -450,18 +440,33 @@ COPY cityofmist.t_user (id, user_name, password) FROM stdin;
 --
 
 COPY cityofmist.tag (id, burned, tag_type, theme_id, tag_name, letter) FROM stdin;
-312	0	0	273	w1	0
-315	1	0	274	w2	0
-318	1	0	275	w3	0
-321	0	0	276	w4	0
-313	1	1	273	p1	0
-314	0	1	273	p5	0
-316	0	1	274	p2	0
-317	1	1	274	p6	0
-319	0	1	275	p3	0
-320	0	1	275	p7	0
-322	1	1	276	p4	0
-323	0	1	276	p8	0
+335	1	1	285	p1	0
+336	0	1	285	p5	0
+337	0	0	285	w1	0
+338	0	0	285	w5	0
+339	0	1	286	p2	0
+340	1	1	286	p6	0
+341	0	0	286	w2	0
+342	0	0	286	w6	0
+343	0	1	287	p3	0
+344	0	1	287	p7	0
+345	1	0	287	w3	0
+346	0	0	287	w7	0
+347	0	1	288	p4	0
+348	0	1	288	p8	0
+349	0	0	288	w4	0
+350	0	0	288	w8	0
+362	1	1	293	p1	0
+363	0	1	293	p5	0
+364	0	0	293	w1	0
+365	0	1	294	p2	0
+366	1	0	294	w2	0
+367	0	0	294	w3	0
+368	0	1	295	p3	0
+369	0	1	295	p6	0
+370	1	0	295	w4	0
+371	0	1	296	p4	0
+372	0	0	296	w5	0
 \.
 
 
@@ -472,10 +477,14 @@ COPY cityofmist.tag (id, burned, tag_type, theme_id, tag_name, letter) FROM stdi
 --
 
 COPY cityofmist.theme (id, logos_mythos, theme_type, attention, fade, hero_id, theme_title, mystery) FROM stdin;
-273	0	1	{1,1,0}	{1,0,0}	1	Ink	mystery
-274	1	4	{0,1,1}	{0,1,0}	1	Ink	mystery
-275	0	2	{1,0,1}	{0,0,1}	1	Ink	mystery
-276	1	2	{1,1,0}	{1,0,0}	1	Ink	mystery
+285	1	1	{1,0,0}	{0,0,0}	1	Ink	The People of this neighborhood deserve to know.
+286	0	3	{0,0,0}	{0,0,1}	1	Ink	The People of this neighborhood deserve to know.
+287	0	6	{1,0,0}	{0,0,0}	1	Ink	The People of this neighborhood deserve to know.
+288	1	4	{0,0,1}	{0,0,1}	1	Ink	The People of this neighborhood deserve to know.
+293	1	2	{0,1,0}	{1,0,0}	2	Searching for the lost	The People of this neighborhood deserve to know.
+294	1	1	{0,1,0}	{1,0,0}	2	Searching for the lost	The People of this neighborhood deserve to know.
+295	0	5	{0,0,1}	{0,0,1}	2	Searching for the lost	The People of this neighborhood deserve to know.
+296	0	6	{1,0,0}	{1,0,0}	2	Searching for the lost	The People of this neighborhood deserve to know.
 \.
 
 
@@ -524,7 +533,7 @@ SELECT pg_catalog.setval('cityofmist."t_user_ID_seq"', 15, true);
 -- Name: tag_id_seq; Type: SEQUENCE SET; Schema: cityofmist; Owner: postgres
 --
 
-SELECT pg_catalog.setval('cityofmist.tag_id_seq', 323, true);
+SELECT pg_catalog.setval('cityofmist.tag_id_seq', 372, true);
 
 
 --
@@ -533,7 +542,7 @@ SELECT pg_catalog.setval('cityofmist.tag_id_seq', 323, true);
 -- Name: theme_id_seq; Type: SEQUENCE SET; Schema: cityofmist; Owner: postgres
 --
 
-SELECT pg_catalog.setval('cityofmist.theme_id_seq', 276, true);
+SELECT pg_catalog.setval('cityofmist.theme_id_seq', 296, true);
 
 
 --
@@ -718,7 +727,7 @@ ALTER TABLE ONLY cityofmist.hero
     ADD CONSTRAINT user_hero FOREIGN KEY (user_id) REFERENCES cityofmist.t_user(id) NOT VALID;
 
 
--- Completed on 2023-07-20 21:34:24
+-- Completed on 2023-07-21 20:37:57
 
 --
 -- PostgreSQL database dump complete
