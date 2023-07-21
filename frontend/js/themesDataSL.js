@@ -78,8 +78,7 @@ function loadTags(allTags){
   };
   for (var ID_index = 0; ID_index < 4; ID_index++){
     var tagLength = allTags["id"+(ID_index+1)]["tagType"].length;
-    
-    var powerLength = allTags["id"+(ID_index+1)]["tagType"].filter(function(tagType){ return tagType==0; }).length;
+    var powerLength = allTags["id"+(ID_index+1)]["tagType"].filter(function(tagType){ return tagType==1; }).length;
     var tagTexts = allTags["id"+(ID_index+1)]["text"];
     var tagQuestionLetter = allTags["id"+(ID_index+1)]["questionLetter"];
     var tagBurned = allTags["id"+(ID_index+1)]["burned"];
@@ -87,29 +86,34 @@ function loadTags(allTags){
     PowerTagCommons = document.querySelectorAll(".Power#id"+(ID_index+1)+">.PowerTagCommon");
     PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed PowerTags.
       PowerTagCommon.parentNode.removeChild(PowerTagCommon);
-    }); var k=0;
-    for(var i=0; i<powerLength; i++){
-      var tagText = tagTexts[i];
-      powerPlusDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1)+">.PlusDiv");
-      newPlusDiv(powerPlusDiv, translatorDict[tagQuestionLetter[i].toString()]);
-      PowerTagElems = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
-      PowerTagElems[PowerTagElems.length-1].value = tagText;
-      burnedTagElems = document.querySelectorAll(".bottomHalf>.Power#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
-      burnedTagElems[k].checked = parseInt(tagBurned[i]); k++;
-    }
-
-
+    });
     PowerTagCommons = document.querySelectorAll(".Weakness#id"+(ID_index+1)+">.PowerTagCommon");
     PowerTagCommons.forEach(PowerTagCommon => {             //remove all currently displayed WeaknessTags.
       PowerTagCommon.parentNode.removeChild(PowerTagCommon);
-    }); var k=0;
+    });
+
+    var powerDiv = document.querySelector(".bottomHalf>.Power#id"+(ID_index+1));
+    weaknessDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1));
+
+    var k=0;
+    for(var i=0; i<powerLength; i++){
+      var tagText = tagTexts[i];
+      powerPlusDiv = powerDiv.querySelector(".PlusDiv");
+      newPlusDiv(powerPlusDiv, translatorDict[tagQuestionLetter[i].toString()]);
+      PowerTagElems = powerDiv.querySelectorAll(".powerTag");
+      PowerTagElems[PowerTagElems.length-1].value = tagText;
+      burnedTagElems = powerDiv.querySelectorAll(".burnTag");
+      burnedTagElems[k].checked = parseInt(tagBurned[i]); k++;
+    }
+
+    k=0;
     for(var i=powerLength; i<tagLength; i++){
       var tagText = tagTexts[i];
-      weaknessPlusDiv = document.querySelector(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PlusDiv");
+      weaknessPlusDiv = weaknessDiv.querySelector(".PlusDiv");
       newPlusDiv(weaknessPlusDiv, translatorDict[tagQuestionLetter[i].toString()]);
-      weaknessTagElems = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.powerTag");
+      weaknessTagElems = weaknessDiv.querySelectorAll(".powerTag");
       weaknessTagElems[weaknessTagElems.length-1].value = tagText;
-      burnedTagElems = document.querySelectorAll(".bottomHalf>.Weakness#id"+(ID_index+1)+">.PowerTagCommon>.burnTag");
+      burnedTagElems = weaknessDiv.querySelectorAll(".burnTag");
       burnedTagElems[k].checked = parseInt(tagBurned[i]); k++;
     }
   }
@@ -141,24 +145,11 @@ function loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds){
   themeTypes = document.querySelectorAll(".TypeTextBox");
 
   for (var i = 0; i < themeTypeIndicators.length; i++){
-    if(themeTypeIndicators[i]=="1"){
-      if(TypeHeaders[i].getAttribute("class")=="TypeHeader logos"){
-        TypeHeaders[i].click();
-        themeTypes[i].selectedIndex = checkedThemeTypeIds[i] - Math.round(checkedThemeTypeIds[i] / 20) * 20;
-      }
-      else{
-        themeTypes[i].selectedIndex = checkedThemeTypeIds[i] - Math.round(checkedThemeTypeIds[i] / 20) * 20;
-      }
+    if((themeTypeIndicators[i]=="1" && TypeHeaders[i].getAttribute("class")=="TypeHeader logos" ) ||
+       (themeTypeIndicators[i]=="0" && TypeHeaders[i].getAttribute("class")=="TypeHeader mythos")){
+      TypeHeaders[i].click();
     }
-    else{
-      if(TypeHeaders[i].getAttribute("class")=="TypeHeader mythos"){
-        TypeHeaders[i].click();
-        themeTypes[i].selectedIndex = checkedThemeTypeIds[i] - Math.round(checkedThemeTypeIds[i] / 10) * 10;
-      }
-      else{
-        themeTypes[i].selectedIndex = checkedThemeTypeIds[i] - Math.round(checkedThemeTypeIds[i] / 10) * 10;
-      }
-    }
+    themeTypes[i].selectedIndex = checkedThemeTypeIds[i];
   }
   displayQuestions();
 }
@@ -279,10 +270,13 @@ function loadThemeData(){
       postedData = { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosenAsNum };
       (async () => {
         themeData = await postRequest(postedData, url);
-        console.log("Nooo")
         if(themeData != ":("){
+          console.log(themeData)
           window.localStorage.setItem(IDsaveSlotChosen+" themeData", JSON.stringify(themeData));
           loadThemeData();
+        }
+        else{
+          console.log("Nooo")
         }
       })();
     }
