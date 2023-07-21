@@ -117,41 +117,32 @@ async function getThemeID(heroID){
   });
 }
 async function getTags(themeID){
-  themePowTags = { "questionLetter": [], "text": [], "burned": [], }
-  themeWekTags = { "questionLetter": [], "text": [], "burned": [], }
-  return new Promise((resolve, reject) => {
+  themeTags = { "questionLetter": [], "text": [], "burned": [], "tagType": []}
+    return new Promise((resolve, reject) => {
     var SQLTextQuery = `SELECT * FROM cityofmist.tag WHERE theme_id=$1;`;
-    console.log(themeID);
     pool.query(SQLTextQuery, [themeID], (err, rows, fields) => {
       for (var k = 0; k < rows.rows.length; k++) {
-        if(rows.rows[k]["tag_type"]==0){
-          themePowTags["questionLetter"].push(rows.rows[k]["letter"]);
-          themePowTags["text"]          .push(rows.rows[k]["tag_name"]);
-          themePowTags["burned"]        .push(rows.rows[k]["burned"]);
-        }
-        else if(rows.rows[k]["tag_type"]==1){
-          themeWekTags["questionLetter"].push(rows.rows[k]["letter"]);
-          themeWekTags["text"]          .push(rows.rows[k]["tag_name"]);
-          themeWekTags["burned"]        .push(rows.rows[k]["burned"]);
-        }
-        if((k+1)==rows.rows.length){ resolve([themePowTags, themeWekTags]); }
+        themeTags["questionLetter"].push(rows.rows[k]["letter"]);
+        themeTags["text"]          .push(rows.rows[k]["tag_name"]);
+        themeTags["burned"]        .push(rows.rows[k]["burned"]);
+        themeTags["tagType"]       .push(rows.rows[k]["tag_type"]);
+        if((k+1)==rows.rows.length){ resolve(themeTags); }
       }
     });
   });
 }
 async function getAllTags(themeIDs){
-  var allPowerTags    = { "id1": null, "id2": null, "id3": null, "id4": null, };
-  var allWeaknessTags = { "id1": null, "id2": null, "id3": null, "id4": null, };
+  var allTags    = { "id1": null, "id2": null, "id3": null, "id4": null, };
   return new Promise(async(resolve, reject) => {
     for (var i=0; i<themeIDs.length; i++){
       if((i+1)==themeIDs.length){
-        [allPowerTags["id"+(i+1)], allWeaknessTags["id"+(i+1)]] = await getTags(themeIDs[i]["id"]);
+        allTags["id"+(i+1)] = await getTags(themeIDs[i]["id"]);
         console.log("jojo")
-        resolve([allPowerTags, allWeaknessTags]);
+        resolve(allTags);
         reject("error");
       }
       else{
-        [allPowerTags["id"+(i+1)], allWeaknessTags["id"+(i+1)]] = await getTags(themeIDs[i]["id"]);
+        allTags["id"+(i+1)] = await getTags(themeIDs[i]["id"]);
       }
     }
   });
@@ -162,10 +153,11 @@ app.post('/loadTheme', async(req, res) => {
   userName = themeData["userName"];
   password = themeData["password"];
   heroSubID = themeData["heroSubID"];
-  var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID[0]["id"], heroSubID);
+  var userID   = await getUserID(userName, password);
+  var heroID   = await getHeroID(userID[0]["id"], heroSubID);
   var themeIDs = await getThemeID(heroID[0]["id"]);
 
+  console.log(themeIDs);
   themeTypeJson = { "a": [] };
   logosMythosJson = { "a": [] };
   titleTextJson={ "title": [] };
@@ -201,13 +193,12 @@ app.post('/loadTheme', async(req, res) => {
         }
       }
     }
-    var allPowerTags = undefined; var allWeaknessTags = undefined;
-    [allPowerTags, allWeaknessTags] = await getAllTags(themeIDs);
+    var allTags = await getAllTags(themeIDs);
     postedData = {
       "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
       "TextData": [titleTextJson["title"], textBoxTextJson["textBox"]],
       "Checkboxes": CheckboxesJson,
-      "TagData": [allPowerTags, allWeaknessTags],
+      "TagData": allTags,
     };
     return res.send(postedData);
   });
