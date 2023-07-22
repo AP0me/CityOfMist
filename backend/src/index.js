@@ -35,6 +35,7 @@ const pool = new pg.Pool({
   database: 'verceldb',
   password: 'PceRw6frG8hX',
   ssl: true,
+  port: 5432,
 });
 pool.connect();
 
