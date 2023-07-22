@@ -5,7 +5,7 @@ var path = require('path');
 var pg = require('pg');
 const { json } = require('body-parser');
 
-const app = express(); const port = 9275;
+const app = express(); const port = 5001;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Frontend')));
@@ -30,10 +30,10 @@ app.get('/js/fetchPost.js', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/js/fetchPost.js'));});
 
 const pool = new pg.Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'anri1551',
+  user: 'default',
+  host: 'ep-lingering-king-698770.us-east-1.postgres.vercel-storage.com',
+  database: 'verceldb',
+  password: 'PceRw6frG8hX',
 });
 pool.connect();
 
