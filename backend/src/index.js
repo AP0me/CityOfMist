@@ -34,6 +34,7 @@ const pool = new pg.Pool({
   host: 'ep-lingering-king-698770.us-east-1.postgres.vercel-storage.com',
   database: 'verceldb',
   password: 'PceRw6frG8hX',
+  ssl: true,
 });
 pool.connect();
 
