@@ -5,7 +5,7 @@ var path = require('path');
 var pg = require('pg');
 const { json } = require('body-parser');
 
-const app = express(); const port = 5001;
+const app = express(); const port = 9275;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'Frontend')));
