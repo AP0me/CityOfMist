@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="formDiv">
+    <input placeholder="Username" class="username" name="username">
+    <input placeholder="Password" class="password" name="password">
+    <input type="button" value="SignUp/Login" onclick="addLoginToSession()">
+  </div>
+  <script>
+    function postRequest(data, url) {
+      console.log("posted");
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(result => { return result; })
+      .catch(error => { return ':('; });
+    }
+    async function addLoginToSession(){
+      var accountCreated = await postRequest({
+        "username": window.localStorage.getItem("username"), 
+        "password": window.localStorage.getItem("password"), 
+      }, window.location.origin+"/addUser");
+      if(accountCreated){
+        window.localStorage.setItem("username", document.querySelector(".username").value);
+        window.localStorage.setItem("password", document.querySelector(".password").value);
+        window.location = window.location.origin+"/"
+      }
+    }
+  </script>
+</body>
+</html>
