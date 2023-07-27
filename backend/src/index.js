@@ -29,27 +29,26 @@ app.get('/serviceWorker.js', async(req, res) => {
 app.get('/js/fetchPost.js', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/js/fetchPost.js'));});
 
+//const pool = new pg.Pool({
+//  user: 'default',
+//  host: 'ep-lingering-king-698770.us-east-1.postgres.vercel-storage.com',
+//  database: 'verceldb',
+//  password: 'PceRw6frG8hX',
+//  ssl: true,
+//  port: 5432,
+//});
+//pool.connect();
+
 const pool = new pg.Pool({
-  user: 'default',
-  host: 'ep-lingering-king-698770.us-east-1.postgres.vercel-storage.com',
-  database: 'verceldb',
-  password: 'PceRw6frG8hX',
-  ssl: true,
-  port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: 'anri1551',
 });
 pool.connect();
 
 app.get('/', async(req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/themes.html'));
-});
-
-app.post('/storeUserName', async (req, res) => {
-  var themeData = req.body;
-  userName = themeData['userName']
-  var SQLTextQuery = `INSERT INTO cityofmist.t_user (user_name, password) VALUES ($1, $2);`;
-  var result = await pool.query(SQLTextQuery, [userName, "password"]);
-  if(err){ return res.status(500).json({ "error": 'failed to add user into the database' }); }
-  else{ return res.status(200).json({ "success": 'New user added successfully' }); }
 });
 
 async function getUserID(userName, password){
@@ -61,12 +60,24 @@ async function getUserID(userName, password){
     });
   });
 }
-app.post('/loadUser', async(req, res) => {
-  var themeData = req.body;
-  var userName = themeData["userName"];
-  var password = themeData["password"];
-  var result = await getUserID(userName, password);
-  return res.send(result);
+
+app.get('/addUser', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/login.html'));
+});
+app.post('/addUser', async (req, res) => {
+  var loginData = req.body;
+  var userName = loginData["username"];
+  var password = loginData["password"];
+  var userID = await getUserID(userName, password);
+  if(!userID){
+    var SQLTextQuery = `INSERT INTO cityofmist.t_user (user_name, password) VALUES ($1, $2);`;
+    pool.query(SQLTextQuery, [userName, password], (err, rows, fields) => {
+      console.log(err)
+      if(err){ return res.send("0"); }
+      else{ return res.send("1"); } 
+    });
+  }
+  else{ return res.send("1"); }
 });
 
 async function getHeroID(userID, heroSubID){
@@ -80,14 +91,35 @@ async function getHeroID(userID, heroSubID){
 }
 app.post('/loadHero', async(req, res) => {
   var themeData = req.body;
-  var userName = themeData["userName"];
-  var password = themeData["password"];
-  var heroSubID = themeData["heroSubID"];
+  var userName  = themeData["userName"];
+  var password  = themeData["password"];
   var userID = await getUserID(userName, password);
-  var heroID = await getHeroID(userID, heroSubID);
-  return res.send(heroID);
+  if(userID.length>0){
+    userID=userID[0]["id"];
+    var SQLTextQuery = `SELECT hero_name, user_hero_subid FROM cityofmist.hero WHERE user_id=$1;`;
+    pool.query(SQLTextQuery, [userID], (err, rows, fields) => {
+      if(err) { return err; }
+      else{
+        var heroData = rows.rows;
+        var saveSlotNames = heroData.map(function(heroData){return heroData["hero_name"]});
+        var saveSlotIDs = heroData.map(function(heroData){return heroData["user_hero_subid"]});
+        console.log(saveSlotNames, saveSlotIDs)
+        var saveSlotsData={
+          "saveSlotNames": saveSlotNames,
+          "saveSlotIDs"  : saveSlotIDs,
+        };
+        return res.send(saveSlotsData);
+      }
+    });
+  }
+  else{
+    var saveSlotsData={
+      "saveSlotNames": [],
+      "saveSlotIDs"  : [],
+    };
+    return res.send(saveSlotsData);
+  }
 });
-
 async function addHero(userID, heroName, heroSubID){
   return new Promise((resolve, reject) => {
     var SQLTextQuery = `INSERT INTO cityofmist.hero (user_id, hero_name, user_hero_subid) VALUES ($1, $2, $3);`;
@@ -104,9 +136,10 @@ app.post('/addHero', async(req, res) => {
   var heroSubID = themeData["heroSubID"];
   var heroName  = themeData["heroName"];
   var userID = await getUserID(userName, password);
+  userID = userID[0]["id"];
   await addHero(userID, heroName, heroSubID);
 
-  return res.send(heroID);
+  return res.send("Hero Added");
 });
 
 async function getThemeID(heroID){
@@ -118,7 +151,7 @@ async function getThemeID(heroID){
     });
   });
 }
-async function getTags(themeID){
+async function getThemeTags(themeID){
   themeTags = { "questionLetter": [], "text": [], "burned": [], "tagType": []}
     return new Promise((resolve, reject) => {
     var SQLTextQuery = `SELECT * FROM cityofmist.tag WHERE theme_id=$1;`;
@@ -133,24 +166,23 @@ async function getTags(themeID){
     });
   });
 }
-async function getAllTags(themeIDs){
+async function getTags(themeIDs){
   var allTags    = { "id1": null, "id2": null, "id3": null, "id4": null, };
   return new Promise(async(resolve, reject) => {
     for (var i=0; i<themeIDs.length; i++){
       if((i+1)==themeIDs.length){
-        allTags["id"+(i+1)] = await getTags(themeIDs[i]["id"]);
+        allTags["id"+(i+1)] = await getThemeTags(themeIDs[i]["id"]);
         console.log("jojo")
         resolve(allTags);
         reject("error");
       }
       else{
-        allTags["id"+(i+1)] = await getTags(themeIDs[i]["id"]);
+        allTags["id"+(i+1)] = await getThemeTags(themeIDs[i]["id"]);
       }
     }
   });
 }
 app.post('/loadTheme', async(req, res) => {
-  // { "userName": "public", "password": "password", "heroSubID": "Bob" }
   var themeData = req.body;
   userName = themeData["userName"];
   password = themeData["password"];
@@ -195,7 +227,7 @@ app.post('/loadTheme', async(req, res) => {
         }
       }
     }
-    var allTags = await getAllTags(themeIDs);
+    var allTags = await getTags(themeIDs);
     postedData = {
       "ThemeType": [themeTypeJson["a"], logosMythosJson["a"]],
       "TextData": [titleTextJson["title"], textBoxTextJson["textBox"]],
@@ -206,7 +238,20 @@ app.post('/loadTheme', async(req, res) => {
   });
 });
 
-
+function areThemesDefined(heroID){
+  return new Promise((resolve, reject) => {
+    var SQLTextQuery = 
+    `SELECT COUNT(*) as count FROM cityofmist.theme WHERE hero_id = $1;`
+    pool.query(SQLTextQuery, [heroID], (err, rows, fields) => {
+      console.log(err);
+      if(err){ reject({ "error": err }); return; }
+      else{
+        if( parseInt(rows.rows[0]["count"])>=4){ resolve(1); }
+        else{ resolve(0); }
+      }
+    });
+  });
+}
 async function addTheme(
   LogosMythos1, Type1, Attention1, Fade1, heroID, Title1, Mystery1,
   LogosMythos2, Type2, Attention2, Fade2, Title2, Mystery2,
@@ -299,20 +344,6 @@ async function updateTheme(
         if(err){ reject({ "error": err }); return; }
         else{ resolve({ "success": "new Theme added" }); }
       });
-  });
-}
-function areThemesDefined(heroID){
-  return new Promise((resolve, reject) => {
-    var SQLTextQuery = 
-    `SELECT COUNT(*) as count FROM cityofmist.theme WHERE hero_id = $1;`
-    pool.query(SQLTextQuery, [heroID], (err, rows, fields) => {
-      console.log(err);
-      if(err){ reject({ "error": err }); return; }
-      else{
-        if( parseInt(rows.rows[0]["count"])>=4){ resolve(1); }
-        else{ resolve(0); }
-      }
-    });
   });
 }
 app.post('/saveThemes', async(req, res) => {
