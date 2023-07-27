@@ -22,8 +22,8 @@ function newSaveSlot(){
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
 
   saveSlotsPost = {
-    "userName": "public",
-    "password": "password",
+    "userName": window.localStorage.getItem("username"),
+    "password": window.localStorage.getItem("password"),
     "heroSubID": saveSlotsOptionsLength,
     "heroName": saveSlotName,
   }
@@ -51,13 +51,29 @@ function removeSaveSlot(){
   window.localStorage.setItem("saveSlotsData", JSON.stringify(saveSlotsData));
 }
 
-function loadSaveSlots(){
+function postRequest(data, url) {
+  console.log("posted");
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(result => { return result; })
+  .catch(error => { return ':('; });
+}
+async function loadSaveSlots(){
   saveSlotsString = window.localStorage.getItem("saveSlotsData");
   if(saveSlotsString==null){
-    saveSlotsData={
-      "saveSlotNames": [],
-      "saveSlotIDs": [],
-    }
+    heroNavPost = {
+      "userName": window.localStorage.getItem("username"),
+      "password": window.localStorage.getItem("password"),
+    };
+    var url = window.location.origin+"/loadHero";
+    var saveSlotsData = await postRequest(heroNavPost, url);
+    window.localStorage.getItem("saveSlotsData", saveSlotsData);
   }
   else{ saveSlotsData = JSON.parse(saveSlotsString); }
   saveSlotNameInput = document.querySelector(".saveSlotName");
