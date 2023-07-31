@@ -89,3 +89,5 @@ function loadTricks(){
     }
   }
 }
+addCommonTricks();
+loadTricks();

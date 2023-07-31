@@ -4,6 +4,10 @@
 *:focus{
   outline: none !important;
 }
+select, button, input{
+  border-width: 1px;
+  background-color: transparent;
+}
 html{
   width: 100vw;
   height: 100vh;
@@ -179,7 +183,7 @@ body{
   .resizebar{
     position: relative;
     height: 100%;
-    width: 17.617px;
+    width: 7.617px;
     overflow-y: auto;
     grid-row: span 2;
   }
@@ -191,7 +195,10 @@ body{
     height: 1000%;
   }
   .topOfBottomHalfRoot>*{
-    font-size: 3cqw;
+    font-size: 3vw;
+  }
+  .navbar{
+    margin-right: 7px;
   }
 }
 .theme{
@@ -244,6 +251,13 @@ body{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
+.AttentionCheckContainer>.AttentionCheck{
+  margin: 0;
+  height: 70%;
+  width : 70%;
+  align-self  : center;
+  justify-self: center;
+}
 .Fade{
   display: grid;
   grid-template-rows: 1fr 1fr;
@@ -259,6 +273,13 @@ body{
 .FadeCheckContainer{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+}
+.FadeCheckContainer>.FadeCheck{
+  margin: 0;
+  height: 70%;
+  width : 70%;
+  align-self  : center;
+  justify-self: center;
 }
 .checkAttentionFade{
   display: grid;
@@ -326,5 +347,66 @@ body{
   color: white;
   background-color: gray;
 }
-.attFadeLabel{
+
+.rollDice{
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  grid-template-columns: 1fr 1fr;
+}
+.rollResult{
+  border: 1px solid gray;
+  display: flex;
+  justify-content: space-around;
+  grid-column: span 2;
+  overflow-x: auto;
+}
+.rollResult[color=graycolor]{
+  color: rgba(0, 0, 0, 0.5);
+}
+.numberOfDice{
+  display: grid;
+  width : 90%;
+  border: 1px solid gray;
+  align-self: center;
+  justify-self: center;
+  user-select: none;
+}
+.numberOfDice>div{
+  width : min-content;
+  height: min-content;
+  align-self: center;
+  justify-self: center;
+}
+.resultDisplay{
+  display: grid;
+  background-color: transparent;
+  border: 1px solid gray;
+  grid-row: span 2;
+  width : 9%;
+  aspect-ratio: 1;
+  align-self: center;
+  justify-self: center;
+  animation-name: rotate;
+}
+@keyframes resultDisplayAnimation{
+  from {rotate: 0deg;}
+  to {rotate: 360deg;}
+}
+.resultDisplay[tempcolor=tempgreen]{
+  rotate: 0deg;
+  animation-name: resultDisplayAnimation;
+  animation-duration: 0.5s;
+}
+.diceSelector{
+  width : 90%;
+  align-self  : center;
+  justify-self: center;
+  text-align: center;
+}
+.resultDisplayText{
+  width : min-content;
+  height: min-content;
+  align-self: center;
+  justify-self: center;
+  user-select: none;
 }
