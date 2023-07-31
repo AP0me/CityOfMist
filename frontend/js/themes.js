@@ -480,15 +480,8 @@ elem.scrollBy(0, elemSubdiv.offsetHeight/2);
 function bottomHalfSelector(selector){
   selectedOption   = selector.querySelector("option:checked");
   selectedOptionID = selectedOption.getAttribute("id");
-  document.querySelectorAll(".bottomHalfRoot>.hideable").forEach(element => {
+  document.querySelectorAll('.bottomHalfRoot>.hideable[visible="id1"]').forEach(element => {
     element.setAttribute("visible", "id0");
   });
-  if(selectedOptionID == "option1"){
-    document.querySelector(".tagQuestionContainer").setAttribute("visible", "id1");
-  }
-  else if(selectedOptionID == "option2"){
-    document.querySelector(".commonTricks").setAttribute("visible", "id1");
-    addCommonTricks();
-    loadTricks();
-  }
+  document.querySelector(".bottomHalfRoot>."+selectedOptionID).setAttribute("visible", "id1");
 }

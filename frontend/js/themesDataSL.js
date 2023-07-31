@@ -147,6 +147,7 @@ function loadThemeTypes(themeTypeIndicators, checkedThemeTypeIds){
   for (var i = 0; i < themeTypeIndicators.length; i++){
     if((themeTypeIndicators[i]=="1" && TypeHeaders[i].getAttribute("class")=="TypeHeader logos" ) ||
        (themeTypeIndicators[i]=="0" && TypeHeaders[i].getAttribute("class")=="TypeHeader mythos")){
+        console.log(themeTypeIndicators[i]=="0", TypeHeaders[i].getAttribute("class"));
       TypeHeaders[i].click();
     }
     themeTypes[i].selectedIndex = checkedThemeTypeIds[i];
@@ -242,9 +243,9 @@ function saveThemeData(){
 
     postData = {
       "themeData": themeData,
-      "navData": { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosen.replace("saveSlotName", "") }
+      "navData": { "userName": window.localStorage.getItem("username"), "password": window.localStorage.getItem("password"), "heroSubID": IDsaveSlotChosen.replace("saveSlotName", "") }
     }
-    url = "http://localhost:5000/saveThemes";
+    url = window.location.origin+"/saveThemes";
     console.log("post sent");
     postRequest(postData, url);
   }
@@ -266,8 +267,8 @@ function loadThemeData(){
     }
     else{
       IDsaveSlotChosenAsNum = parseInt(IDsaveSlotChosen.replace("saveSlotName", ""));
-      url = "http://localhost:5000/loadTheme";
-      postedData = { "userName": "public", "password": "password", "heroSubID": IDsaveSlotChosenAsNum };
+      url = window.location.origin+"/loadTheme";
+      postedData = { "userName": window.localStorage.getItem("username"), "password": window.localStorage.getItem("password"), "heroSubID": IDsaveSlotChosenAsNum };
       (async () => {
         themeData = await postRequest(postedData, url);
         if(themeData != ":("){

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login or SignUp</title>
+  <link rel="stylesheet" type="text/css" href="login.css" />
+</head>
+<body>
+  <div class="formDivContainer">
+      <div class="formDiv">
+      <p class="cityMoji">🌁</p>
+      <div class="loginTextContainer">
+        <div class="loginText">Build your hero with CTOM character builder.</div>
+      </div>
+      <input type="text" placeholder="Username" class="username" name="username">
+      <input type="password" placeholder="Password" class="password" name="password">
+      <input type="submit" value="SignUp/Login" class="loginButton" onclick="addLoginToSession()">
+    </div>
+  </div>
+
+  <script src="./js/fetchPost.js"></script>
+  <script>
+    async function addLoginToSession(){
+      var accountCreatedOrFound = await postRequest({
+        "username": document.querySelector(".username").value,
+        "password": document.querySelector(".password").value,
+      }, window.location.origin+"/addUser");
+      if(accountCreatedOrFound){
+        window.localStorage.setItem("username", document.querySelector(".username").value);
+        window.localStorage.setItem("password", document.querySelector(".password").value);
+        console.log()
+        window.location = window.location.origin+"/";
+      }
+    }
+  </script>
+</body>
+</html>
