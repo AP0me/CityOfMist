@@ -74,6 +74,9 @@ pool.connect((err, client, done) =>{
 app.get('/', async(req, res) =>{
   res.sendFile(path.join(__dirname, '../Frontend/themes.html'));
 });
+app.get('/about', async(req, res) =>{
+  res.sendFile(path.join(__dirname, '../Frontend/about.html'));
+});  
 
 async function getUserID(userName, password){
   return new Promise((resolve, reject) =>{
