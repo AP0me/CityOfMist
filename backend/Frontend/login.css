@@ -63,3 +63,25 @@ html, body{
   justify-self: center;
 }
 
+.publicAccountInfo{
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-template-rows: 1fr 1fr;
+}
+.publicAccountInfo>div{
+  border: 1px solid blueviolet;
+  text-align: center;
+}
+.publicAccountInfo>.usernamePresent, .publicAccountInfo>.passwordPresent{
+  border-right: 0;
+}
+.publicAccountInfo>.username, .publicAccountInfo>.password{
+  border-left: 0;
+}
+.publicAccountHeader{
+  grid-column: span 2;
+}
+.emptyDiv{
+  border: 0;
+  height: 10%;
+}
