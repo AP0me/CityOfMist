@@ -53,6 +53,7 @@ function newPlusDiv(thePlusDiv, initLetter){
     aNewPlusDiv.setAttribute("onfocus",  "newPlusDiv(this)");
     aNewPlusDiv.innerText = "+";
     LocalParent.appendChild(aNewPlusDiv);
+    return thePlusDiv;
   }
 }
 function deleteThisDiv(ThisDiv){
@@ -451,12 +452,16 @@ displayQuestions();
 function letteredQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
   plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalf>.Power>.PlusDiv");
-  newPlusDiv(plusDivAbove, answeredLetter);
+  var thePlusDiv = newPlusDiv(plusDivAbove, answeredLetter);
+  thePlusDiv.scrollIntoView();
+  thePlusDiv.focus();
 }
 function letteredWeaknessQuestionAnswered(letteredQuestion, themeId){
   answeredLetter = letteredQuestion.getAttribute("letter");
   plusDivAbove = document.querySelector(".theme#theme"+(themeId+1)+">.bottomHalf>.Weakness>.PlusDiv");
-  newPlusDiv(plusDivAbove, answeredLetter);
+  var thePlusDiv = newPlusDiv(plusDivAbove, answeredLetter);
+  thePlusDiv.scrollIntoView();
+  thePlusDiv.focus();
 }
 
 function changeThemeType(elem){
