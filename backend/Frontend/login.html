@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login or SignUp</title>
+  <link rel="stylesheet" type="text/css" href="login.css" />
+</head>
+<body>
+  <div class="formDivContainer">
+      <div class="formDiv">
+      <p class="cityMoji">🌁</p>
+      <div class="loginTextContainer">
+        <div class="loginText">Build your hero with CTOM character builder.</div>
+      </div>
+      <input type="text" placeholder="Username" class="username" name="username">
+      <input type="password" placeholder="Password" class="password" name="password">
+      <input type="submit" value="SignUp/Login" class="loginButton" onclick="addLoginToSession()">
+      <div class="emptyDiv"></div>
+      <div class="publicAccountInfo" onclick="setAccountToPublic()">
+        <div class="publicAccountHeader">Guest Account info</div>
+        <div class="usernamePresent">username:</div> <div class="username">public</div>
+        <div class="passwordPresent">password:</div> <div class="password">password</div> 
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/fetchPost.js"></script>
+  <script>
+    async function addLoginToSession(){
+      var accountCreatedOrFound = await postRequest({
+        "username": document.querySelector(".username").value,
+        "password": document.querySelector(".password").value,
+      }, window.location.origin+"/addUser");
+      if(accountCreatedOrFound){
+        window.localStorage.setItem("username", document.querySelector(".username").value);
+        window.localStorage.setItem("password", document.querySelector(".password").value);
+        console.log()
+        window.location = window.location.origin+"/";
+      }
+    }
+    function setAccountToPublic(){
+      var formDiv = document.querySelector(".formDiv");
+      var username = formDiv.querySelector(".username");
+      var password = formDiv.querySelector(".password");
+      var publicUsername = document.querySelector(".publicAccountInfo>.username").innerText;
+      var publicPassword = document.querySelector(".publicAccountInfo>.password").innerText;
+      if((publicUsername=="public")&&(publicPassword=="password")){
+        username.value = publicUsername;
+        password.value = publicPassword;
+      }
+      else{ alert("Guest account data might have changed, please report to developers"); }
+    }
+  </script>
+</body>
+</html>

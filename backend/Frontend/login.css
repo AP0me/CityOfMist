@@ -1,0 +1,87 @@
+
+html, body{
+  margin: 0;
+  width : 100%;
+  height: 100%;
+  background-color: blueviolet;
+}
+*{ font-size: 3vh; }
+
+.formDivContainer{
+  display: grid;
+  width : 100%;
+  height: 100%;
+}
+
+.formDiv{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width : 900px;
+  max-height: 100vh;
+  aspect-ratio: 9/18;
+  gap: 2px;
+  align-self: center;
+  justify-self: center;
+  align-content: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  overflow: visible;
+}
+
+.formDiv>*{
+  width: 90%;
+  max-width: 300px;
+  border: 1px solid blueviolet;
+  background-color: transparent;
+  align-self: center;
+  justify-self: center;
+  padding: 0;
+  box-sizing: unset;
+}
+.formDiv>*:focus{
+  outline: none;
+}
+
+.cityMoji{
+  margin: 0;
+  width: min-content;
+  height: min-content;
+  overflow: auto;
+  font-size: 20vh;
+}
+.loginTextContainer{
+  display: grid;
+  height: 30%;
+  align-self: center;
+  justify-self: center;
+  border: 0;
+}
+.loginText{
+  height: min-content;
+  align-self: center;
+  justify-self: center;
+}
+
+.publicAccountInfo{
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-template-rows: 1fr 1fr;
+}
+.publicAccountInfo>div{
+  border: 1px solid blueviolet;
+  text-align: center;
+}
+.publicAccountInfo>.usernamePresent, .publicAccountInfo>.passwordPresent{
+  border-right: 0;
+}
+.publicAccountInfo>.username, .publicAccountInfo>.password{
+  border-left: 0;
+}
+.publicAccountHeader{
+  grid-column: span 2;
+}
+.emptyDiv{
+  border: 0;
+  height: 10%;
+}
